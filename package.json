@@ -1,0 +1,19 @@
+{
+  "name": "newton-fractals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "bigfloat": "^0.1.1",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.9",
+    "serve-static": "^1.13.2"
+  }
+}
