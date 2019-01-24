@@ -1,27 +1,35 @@
-class Complex { // my own version of a complex number implementation as the others didnt quite do the trick, I will have to optimize it though.
+import {
+    Decimal
+} from 'decimal.js';
+
+class Complex {
     constructor(obj) {
         if (obj.type === "cartesian") {
             if (obj.val.length === 2) {
-                if (typeof obj.val[0] === "number") this.real = obj.val[0];
-                if (typeof obj.val[0] === "number") this.imag = obj.val[1];
+                this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+                this.imag = (typeof obj.val[1] === "number") ? new Decimal(obj.val[1]) : obj.val[1];
             }
         } else if (obj.type === "polar") {
             if (obj.val.length === 2) {
-                if (typeof obj.val[0] === "number") this.real = obj.val[0] * Math.cos(obj.val[1]);
-                if (typeof obj.val[0] === "number") this.imag = obj.val[0] * Math.sin(obj.val[1]);
+                this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+                this.imag = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+                this.real = this.real.mul(Decimal.cos(obj.val[1]));
+                this.imag = this.imag.mul(Decimal.sin(obj.val[1]));
             }
         }
     }
 
     addition(z) {
-        this.real += z.real;
-        this.imag += z.imag;
+        this.real = this.real.add(z.real);
+        this.imag = this.imag.add(z.imag);
+
         return this;
     }
 
     substract(z) {
-        this.real -= z.real;
-        this.imag -= z.imag;
+        this.real = this.real.sub(z.real);
+        this.imag = this.imag.sub(z.imag);
+
         return this;
     }
 
@@ -29,37 +37,39 @@ class Complex { // my own version of a complex number implementation as the othe
         let a = this.real;
         let b = this.imag;
 
-        this.real = z.real * a - b * z.imag;
-        this.imag = a * z.imag + z.real * b;
+        this.real = z.real.mul(a).sub(b.mul(z.imag));
+        this.imag = a.mul(z.imag).add(z.real.mul(b));
         return this;
     }
 
     getConj() {
-        return cmx(this.real, -this.imag);
+        let zero = new Decimal(0);
+        return cmx(this.real, zero.sub(this.imag));
     }
 
     getAbs() {
-        return Math.sqrt(this.real ** 2 + this.imag ** 2);
+        return Decimal.sqrt(Decimal.pow(this.real, 2).add(Decimal.pow(this.imag, 2)));
     }
 
     getAbsSquared() {
-        return this.real ** 2 + this.imag ** 2
+        return Decimal.pow(this.real, 2).add(Decimal.pow(this.imag, 2));
     }
 
     getArg() {
-        return Math.atan2(this.imag, this.real);
+        return Decimal.atan2(this.imag, this.real);
     }
 
     multiplyByReal(x) {
-        this.real *= x;
-        this.imag *= x;
+        this.real = this.real.mul(x);
+        this.imag = this.imag.mul(x);
 
         return this;
     }
 
+
     divideByReal(x) {
-        this.real /= x;
-        this.imag /= x;
+        this.real = this.real.div(x);
+        this.imag = this.imag.div(x);
 
         return this;
     }
@@ -74,8 +84,8 @@ class Complex { // my own version of a complex number implementation as the othe
         const a = this.real;
         const b = this.imag;
 
-        this.real = a ** 2 - b ** 2;
-        this.imag = 2 * a * b;
+        this.real = Decimal.pow(this.real, 2).sub(Decimal.pow(this.imag, 2));
+        this.imag = a.mul(b).mul(2);
         return this;
     }
 
@@ -83,27 +93,24 @@ class Complex { // my own version of a complex number implementation as the othe
         const a = this.real;
         const b = this.imag;
 
-        return cmx(a ** 2 - b ** 2, 2 * a * b);
+        return cmx(Decimal.pow(this.real, 2).sub(Decimal.pow(this.imag, 2)), a.mul(b).mul(2));
     }
 
     getInstance() {
         return cmx(this.real, this.imag);
     }
 
-    getComplexDerivative(f) {
-        let a = this.getInstance();
-        let z = new Complex({
-            type: "polar",
-            val: [a.getAbs() - 1e-8, a.getArg()]
-        });
-        return f(z).substract(f(a)).divide(z.substract(a));
-    }
+    // getComplexDerivative(f) {
+    //     let a = this.getInstance();
+    //     let z = new Complex({
+    //         type: "polar",
+    //         val: [a.getAbs() - 1e-8, a.getArg()]
+    //     });
+    //     return f(z).substract(f(a)).divide(z.substract(a));
+    // }
 
     cexp(n) {
-        let w = new Complex({
-            type: "polar",
-            val: [this.getAbs() ** n, this.getArg() * n]
-        });
+        let w = pol(Decimal.pow(this.getAbs(), n), this.getArg().mul(n));
 
         this.real = w.real;
         this.imag = w.imag;
@@ -116,17 +123,19 @@ class Complex { // my own version of a complex number implementation as the othe
     }
 
     getSine() {
-        return cmx(Math.sin(this.real) * Math.cosh(this.imag), Math.sinh(this.imag) * Math.cos(this.real));
+        return cmx(Decimal.sin(this.real) * Decimal.cosh(this.imag), Decimal.sinh(this.imag) * Decimal.cos(this.real));
     }
 
     getCosine() {
-        return cmx(Math.cos(this.real) * Math.cosh(this.imag), -Math.sinh(this.imag) * Math.sin(this.real));
+        let zero = new Decimal(0);
+        return cmx(Decimal.cos(this.real).mul(Decimal.cosh(this.imag)), zero.sub(Decimal.sinh(this.imag).mul(Decimal.sin(this.real))));
+    }
+
+    toString() {
+        return `${this.real.toString()}   ${this.imag.toString()}`;
     }
 }
 
-function cdiv(z, w) {
-    return z.getInstance().divide(w);
-}
 
 function cmx(x, y) {
     return new Complex({

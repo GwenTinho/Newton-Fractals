@@ -1,6 +1,8 @@
 import utils from "./utils";
 import complex from "./complex";
-import bigfloat from "bigfloat";
+import {
+    Decimal
+} from "decimal.js";
 
 function genComplexSet(n) {
     let out = [complex.cmx(0, 0)];
@@ -21,7 +23,7 @@ function getSineImg(n, iterations, w, h, rangex, rangey) {
         maxIteration: iterations,
         w,
         h,
-        tolerance: 1e-10
+        tolerance: new Decimal(1e-10)
     }
 }
 
@@ -38,7 +40,8 @@ function getAbsOneFns(n, w, h, iterations) {
     let roots = [];
 
     for (let i = 0; i < n; i++) {
-        roots.push(complex.pol(1, 2 * i * (Math.PI / n)));
+        let pi = new Decimal("3.141592653589793238462643383279");
+        roots.push(complex.pol(1, pi.mul(2 * i).div(n)));
     }
 
     return {
@@ -47,7 +50,7 @@ function getAbsOneFns(n, w, h, iterations) {
         w,
         h,
         maxIteration: iterations,
-        tolerance: 1e-7,
+        tolerance: new Decimal(1e-7),
         roots,
         rangex: [-1.3, 1.3],
         rangey: [-1.3, 1.3]

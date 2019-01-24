@@ -2,7 +2,7 @@ let ctx = canvas.getContext('2d');
 ctx.font = "20px Georgia";
 ctx.fillStyle = "black";
 
-window.onload = async () => {
+async function loadimg() {
     let request = await fetch("/api/genImageData.json");
     let data = await request.json();
 
@@ -16,4 +16,12 @@ window.onload = async () => {
             if (image[y][x] !== 0) drawDot(x, y, image[y][x][1], mapColour(maxIteration, rootlength));
         }
     }
+}
+
+window.onload = () => {
+    ctx.canvas.width = 0;
+    ctx.canvas.height = 0;
+    document.getElementById("load").addEventListener("click", e => {
+        loadimg()
+    });
 }

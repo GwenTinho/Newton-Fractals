@@ -1,8 +1,10 @@
 import utils from "./utils";
 import complex from "./complex";
-import bigfloat from "bigfloat";
+import {
+    Decimal
+} from 'decimal.js';
 
-function gen(obj) { // js version of the pseudocode from wikipedias article on newton fractals
+function gen(obj) {
 
     return new Promise((res, rej) => {
         let image = [];
@@ -18,9 +20,7 @@ function gen(obj) { // js version of the pseudocode from wikipedias article on n
             rangey = obj.rangey,
             roots = obj.roots;
 
-
-        if (!(w || h || maxIteration || roots.length || tolerance)) rej("Bad input");
-
+        if (!(w || h || maxIteration || roots.length || tolerance)) rej("Shitty input");
 
         const rootlength = roots.length
 
@@ -31,23 +31,34 @@ function gen(obj) { // js version of the pseudocode from wikipedias article on n
                 const zy = utils.convertRange(y + 1, [1, h], rangey);
                 let z = complex.cmx(zx, zy);
 
-
                 let val = 0;
 
+                let prevZ = z.getInstance();
+
                 for (let iteration = 0; iteration < maxIteration; iteration++) {
+
                     z.substract(f(z).divide(df(z)));
+
+                    let cmp = prevZ.getInstance().substract(z);
+
+                    if (cmp.imag < 0 && cmp.real < 0) {
+                        iteration = maxIteration - 1;
+                        continue;
+                    }
+
+                    prevZ = z.getInstance();
 
                     for (let i = 0; i < rootlength; i++) {
                         let difference = z.getInstance().substract(roots[i]);
 
-                        if (difference.getAbsSquared() < tolerance ** 2) {
-
+                        if (difference.getAbsSquared().lt(tolerance)) {
                             val = [iteration, i];
                         }
                     }
                 }
 
                 image[y].push(val);
+
             }
         }
         res({
