@@ -29,19 +29,17 @@ function getSineImg(n, iterations, w, h, rangex, rangey) {
 
 function getAbsOneFns(n, w, h, iterations) {
     let f = z => {
-        let a = z.getInstance()
-        return a.cexp(n).substract(complex.cmx(1, 0));
+        return z.getCexp(n).getSubstract(complex.cmxt(1, 0));
     }
     let df = z => {
-        let a = z.getInstance()
-        return a.cexp(n - 1).multiplyByReal(n);
+        return z.getCexp(n - 1).multiplyByReal(n);
     }
 
     let roots = [];
 
     for (let i = 0; i < n; i++) {
         let pi = new Decimal("3.141592653589793238462643383279");
-        roots.push(complex.pol(1, pi.mul(2 * i).div(n)));
+        roots.push(complex.polt(1, pi.mul(2 * i).div(n)));
     }
 
     return {
