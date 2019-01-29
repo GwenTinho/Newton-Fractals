@@ -58,3 +58,7 @@ function hslToRgb(h, s, l) {
 
     return [Math.min(Math.floor(r * 256), 255), Math.min(Math.floor(g * 256), 255), Math.min(Math.floor(b * 256), 255)];
 }
+
+function black(v) {
+    return "black";
+}

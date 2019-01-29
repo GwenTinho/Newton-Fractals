@@ -14,8 +14,17 @@ async function loadimg() {
     for (let y = 0; y < image.length; y++) {
         for (let x = 0; x < image[0].length; x++) {
             if (image[y][x] !== 0) drawDot(x, y, image[y][x][1], mapColour(maxIteration, rootlength));
+            else drawDot(x, y, 0, black);
         }
     }
+}
+
+
+function download() {
+    var download = document.getElementById("download");
+    var image = document.getElementById("canvas").toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
+    download.setAttribute("href", image);
 }
 
 window.onload = () => {
@@ -24,4 +33,5 @@ window.onload = () => {
     document.getElementById("load").addEventListener("click", e => {
         loadimg();
     });
+
 }
