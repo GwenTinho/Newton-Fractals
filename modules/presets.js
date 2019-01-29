@@ -29,7 +29,9 @@ function getSineImg(n, iterations, w, h, rangex, rangey) {
 
 function getAbsOneFns(n, w, h, iterations) {
     let f = z => {
-        return z.getCexp(n).getSubstract(complex.cmxt(1, 0));
+        let v = z.getCexp(n);
+        v.real = v.real.sub(1);
+        return v;
     }
     let df = z => {
         return z.getCexp(n - 1).multiplyByReal(n);

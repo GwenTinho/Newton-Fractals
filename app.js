@@ -18,11 +18,15 @@ app.get("/", (req, res) => {
 app.get("/api/genImageData.json", async (req, res) => {
 
     try {
+        const n = 3,
+            w = 100,
+            h = 100,
+            maxit = 10;
         console.log("generating image ...");
         let start = performance.now();
-        let request = await genImageData.gen2(presets.default.getAbsOneFns(3, 50, 50, 10));
+        let request = await genImageData.gen(presets.default.getAbsOneFns(n, w, h, maxit));
         let completingTime = performance.now() - start;
-        console.log("finished in " + Math.floor(completingTime / 1000) + "seconds");
+        console.log(`finished ${Math.floor(n * w * h * maxit / 1000)}k iterations in ${Math.floor(completingTime / 1000)} seconds (${Math.floor(n * w * h * maxit * 100 / completingTime) / 100}k iterations per second)`);
 
         fs.writeFileSync("image.json", JSON.stringify(request), "utf8");
         return res.json(request);

@@ -162,17 +162,17 @@ class Complex {
 class ComplexTiny {
     constructor(obj) {
         if (obj.type === "cartesian") {
-            if (obj.val.length === 2) {
-                this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-                this.imag = (typeof obj.val[1] === "number") ? new Decimal(obj.val[1]) : obj.val[1];
-            }
+
+            this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+            this.imag = (typeof obj.val[1] === "number") ? new Decimal(obj.val[1]) : obj.val[1];
+
         } else if (obj.type === "polar") {
-            if (obj.val.length === 2) {
-                this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-                this.imag = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-                this.real = this.real.mul(Decimal.cos(obj.val[1]));
-                this.imag = this.imag.mul(Decimal.sin(obj.val[1]));
-            }
+
+            this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+            this.imag = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
+            this.real = this.real.mul(Decimal.cos(obj.val[1]));
+            this.imag = this.imag.mul(Decimal.sin(obj.val[1]));
+
         }
     }
 
@@ -188,7 +188,9 @@ class ComplexTiny {
     }
 
     getAbs() {
-        return Decimal.sqrt(Decimal.pow(this.real, 2).add(Decimal.pow(this.imag, 2)));
+        let a = this.real;
+        let b = this.imag;
+        return Decimal.sqrt(a.mul(a).add(b.mul(b)));
     }
 
     getInstance() {

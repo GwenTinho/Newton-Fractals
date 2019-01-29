@@ -22,6 +22,6 @@ window.onload = () => {
     ctx.canvas.width = 0;
     ctx.canvas.height = 0;
     document.getElementById("load").addEventListener("click", e => {
-        loadimg()
+        loadimg();
     });
 }
