@@ -6,6 +6,7 @@ import {
     performance
 } from "perf_hooks";
 import fs from "fs";
+import path from "path";
 
 const app = express();
 
@@ -19,9 +20,9 @@ app.get("/api/genImageData.json", async (req, res) => {
 
     try {
         const n = 3,
-            w = 500,
-            h = 500,
-            maxit = 16;
+            w = 50,
+            h = 50,
+            maxit = 10;
 
         const iterations = n * w * h * maxit;
         const algStart = new Date();
@@ -38,6 +39,16 @@ app.get("/api/genImageData.json", async (req, res) => {
     } catch (error) {
         console.error(error.message);
     }
+});
+
+app.get("/api/image.json", async (req, res, next) => {
+    try {
+        fs.accessSync("./image.json");
+        res.sendFile(path.join(__dirname, "../image.json"));
+    } catch (error) {
+        console.error(error.message);
+    }
+
 });
 
 app.listen(8080, () => console.log("server running on port 8080"));

@@ -2,8 +2,8 @@ let ctx = canvas.getContext('2d');
 ctx.font = "20px Georgia";
 ctx.fillStyle = "black";
 
-async function loadimg() {
-    let request = await fetch("/api/genImageData.json");
+async function loadimg(path) {
+    let request = await fetch(path);
     let data = await request.json();
 
     const [image, rootlength, w, h, maxIteration] = [data.image, data.rootlength, data.w, data.h, data.maxIteration];
@@ -31,7 +31,9 @@ window.onload = () => {
     ctx.canvas.width = 0;
     ctx.canvas.height = 0;
     document.getElementById("load").addEventListener("click", e => {
-        loadimg();
+        loadimg("/api/genImageData.json");
     });
-
+    document.getElementById("loadFromMemory").addEventListener("click", e => {
+        loadimg("/api/image.json");
+    });
 }
