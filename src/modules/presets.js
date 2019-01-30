@@ -27,7 +27,7 @@ function getSineImg(n, iterations, w, h, rangex, rangey) {
     }
 }
 
-function getAbsOneFns(n, w, h, iterations) {
+function getPresetOfOrderN(n, w, h, iterations) {
     let f = z => {
         let v = z.getCexp(n);
         v.real = v.real.sub(1);

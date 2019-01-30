@@ -30,7 +30,7 @@ app.get("/api/genImageData.json", async (req, res) => {
         algEnd.setMilliseconds(algStart.getMilliseconds() + Math.floor(iterations * 1000 / 3600));
         console.log(`generating image ... \nexpected generation time: ${Math.floor(1000 * iterations/(3600 ** 2)) / 1000}h\nstarted at ${algStart.toTimeString().split(" ")[0]}\nexpected to end at ${algEnd.toTimeString().split(" ")[0]}`);
         let start = performance.now();
-        let request = await genImageData.gen(presets.default.getAbsOneFns(n, w, h, maxit));
+        let request = await genImageData.gen(presets.default.getPresetOfOrderN(n, w, h, maxit));
         let completingTime = performance.now() - start;
         console.log(`finished ${Math.floor(iterations / 1000)}k iterations in ${Math.floor(completingTime / 1000)} seconds (${Math.floor(iterations * 100 / completingTime) / 100}k iterations per second)`);
 
