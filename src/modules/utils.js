@@ -35,9 +35,26 @@ function highestPowerof2(n) {
     return res
 }
 
+function getStartToEndTimes(milliseconds) {
+    const start = new Date();
+    const end = new Date();
+    end.setMilliseconds(start.getMilliseconds() + milliseconds);
+
+    return {
+        start: algStart.toTimeString().split(" ")[0],
+        end: algEnd.toTimeString().split(" ")[0],
+    }
+}
+
+function round(digits, value) {
+    return Math.floor(value * 10 ** digits) / 10 ** digits;
+}
+
 
 export default {
     convertRange,
     newtonsmethod,
-    newtDiv
+    newtDiv,
+    getStartToEndTimes,
+    round
 }

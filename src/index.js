@@ -24,15 +24,26 @@ app.get("/api/genImageData.json", async (req, res) => {
             h = 50,
             maxit = 10;
 
-        const iterations = n * w * h * maxit;
-        const algStart = new Date();
-        const algEnd = new Date();
-        algEnd.setMilliseconds(algStart.getMilliseconds() + Math.floor(iterations * 1000 / 3600));
-        console.log(`generating image ... \nexpected generation time: ${Math.floor(1000 * iterations/(3600 ** 2)) / 1000}h\nstarted at ${algStart.toTimeString().split(" ")[0]}\nexpected to end at ${algEnd.toTimeString().split(" ")[0]}`);
-        let start = performance.now();
-        let request = await genImageData.gen(presets.default.getPresetOfOrderN(n, w, h, maxit));
-        let completingTime = performance.now() - start;
-        console.log(`finished ${Math.floor(iterations / 1000)}k iterations in ${Math.floor(completingTime / 1000)} seconds (${Math.floor(iterations * 100 / completingTime) / 100}k iterations per second)`);
+        const iterations = n * w * h * maxit; // iterations per second average out around 3.6k per second => 3600 / 1000
+        const expectedTimeInMs = Math.floor(iterations * 1000 / 3600);
+        const expectedTimings = utils.default.getStartToEndTimes(expectedTimeInMs);
+        const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
+
+        console.log(`
+        generating image ... 
+        expected generation time: ${expectedTimeInHrs}h
+        started at ${expectedTimings.start}
+        expected to end at ${expectedTimings.end}`);
+
+        const promiseStart = performance.now();
+        const request = await genImageData.gen(presets.default.getPresetOfOrderN(n, w, h, maxit));
+        const completingTime = performance.now() - promiseStart;
+
+        const iterationsInThousands = Math.floor(iterations / 1000);
+        const completingTimeInSeconds = Math.floor(completingTime / 1000);
+        const thousandIterationsPerSecond = utils.default.round(iterations / completingTime);
+
+        console.log(`finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`);
 
         fs.writeFileSync("image.json", JSON.stringify(request), "utf8");
         return res.json(request);
