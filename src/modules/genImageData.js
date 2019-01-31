@@ -36,7 +36,7 @@ function gen(obj) {
             for (let x = 0; x < w; x++) {
                 const zx = utils.convertRange(x + 1, baseRangeX, rangex);
 
-                let z = complex.cmxt(zx, zy);
+                let z = complex.cmx(zx, zy);
 
                 let val = 0;
 

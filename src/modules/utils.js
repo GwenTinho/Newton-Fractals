@@ -41,12 +41,12 @@ function getStartToEndTimes(milliseconds) {
     end.setMilliseconds(start.getMilliseconds() + milliseconds);
 
     return {
-        start: algStart.toTimeString().split(" ")[0],
-        end: algEnd.toTimeString().split(" ")[0],
+        start: start.toTimeString().split(" ")[0],
+        end: end.toTimeString().split(" ")[0],
     }
 }
 
-function round(digits, value) {
+function round(value, digits) {
     return Math.floor(value * 10 ** digits) / 10 ** digits;
 }
 

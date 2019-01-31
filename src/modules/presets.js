@@ -4,7 +4,13 @@ import {
     Decimal
 } from "decimal.js";
 
-function getPresetOfOrderN(n, w, h, iterations) {
+function getPresetOfOrderN(settings) {
+    const
+        n = settings.n,
+        w = settings.w,
+        h = settings.h,
+        iterations = settings.iterations;
+
     let f = z => {
         let v = z.getCexp(n);
         v.real = v.real.sub(1);

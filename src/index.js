@@ -19,29 +19,38 @@ app.get("/", (req, res) => {
 app.get("/api/genImageData.json", async (req, res) => {
 
     try {
-        const n = 3,
-            w = 50,
-            h = 50,
-            maxit = 10;
+        const settings = {
+            n: 3,
+            w: 50,
+            h: 50,
+            iterations: 10 // iterations inside of the generator function not related to this one in this scope
+        }
 
-        const iterations = n * w * h * maxit; // iterations per second average out around 3.6k per second => 3600 / 1000
+        const iterations = settings.n * settings.w * settings.h * settings.iterations; // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / 3600);
         const expectedTimings = utils.default.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
 
-        console.log(`
+        const message = `
+
         generating image ... 
         expected generation time: ${expectedTimeInHrs}h
         started at ${expectedTimings.start}
-        expected to end at ${expectedTimings.end}`);
+        expected to end at ${expectedTimings.end}
+                
+                `;
+
+        console.log(message);
 
         const promiseStart = performance.now();
-        const request = await genImageData.gen(presets.default.getPresetOfOrderN(n, w, h, maxit));
+
+        const request = await genImageData.gen(presets.default.getPresetOfOrderN(settings));
+
         const completingTime = performance.now() - promiseStart;
 
         const iterationsInThousands = Math.floor(iterations / 1000);
         const completingTimeInSeconds = Math.floor(completingTime / 1000);
-        const thousandIterationsPerSecond = utils.default.round(iterations / completingTime);
+        const thousandIterationsPerSecond = utils.default.round(iterations / completingTime, 3);
 
         console.log(`finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`);
 
