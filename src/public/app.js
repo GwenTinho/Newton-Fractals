@@ -10,11 +10,11 @@ async function loadimg(path) {
 
     ctx.canvas.width = w;
     ctx.canvas.height = h;
-
+    console.log(image);
+    clearCanvas();
     for (let y = 0; y < image.length; y++) {
         for (let x = 0; x < image[0].length; x++) {
-            //if (image[y][x][0] !== -1) drawDot(x, y, image[y][x][1], mapColour(maxIteration, rootlength));
-            if (image[y][x]) drawDot(x, y, 0, white);
+            if (image[y][x][0] !== -1) drawDot(x, y, image[y][x][1], mapColour(maxIteration, rootlength));
             else drawDot(x, y, 0, black);
         }
     }
