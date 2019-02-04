@@ -29,4 +29,5 @@ build/Release
 #local stuff
 node_modules
 dist
+image.json
 
