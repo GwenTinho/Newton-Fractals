@@ -10,7 +10,7 @@ async function loadimg(path) {
 
     ctx.canvas.width = w;
     ctx.canvas.height = h;
-    console.log(image);
+
     clearCanvas();
     for (let y = 0; y < image.length; y++) {
         for (let x = 0; x < image[0].length; x++) {

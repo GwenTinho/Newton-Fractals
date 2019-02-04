@@ -21,12 +21,16 @@ app.get("/api/genImageData.json", async (req, res) => {
     try {
         const settings = {
             n: 3,
-            w: 20,
-            h: 20,
+            w: 30,
+            h: 30,
             iterations: 10 // iterations inside of the generator function not related to this one in this scope
         }
 
-        const iterations = settings.n * settings.w * settings.h * settings.iterations; // iterations per second average out around 3.6k per second => 3600 / 1000
+        const scaling = 2;
+        const steps = 5;
+        const boundaries = 4; // increases drawing precision but slows speed dramaticaly
+
+        const iterations = settings.n * settings.w * settings.h * settings.iterations * scaling ** (2 * steps); // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / 3600);
         const expectedTimings = utils.default.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
@@ -44,7 +48,7 @@ app.get("/api/genImageData.json", async (req, res) => {
 
         const promiseStart = performance.now();
 
-        const request = await genImageData.gen(presets.default.getPresetOfOrderN(settings));
+        const request = await genImageData.procedualGen(presets.default.getPresetOfOrderN(settings), scaling, steps, boundaries);
 
         const completingTime = performance.now() - promiseStart;
 
@@ -53,8 +57,6 @@ app.get("/api/genImageData.json", async (req, res) => {
         const thousandIterationsPerSecond = utils.default.round(iterations / completingTime, 3);
 
         console.log(`finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`);
-
-        console.log(request);
 
         fs.writeFileSync("image.json", JSON.stringify(request), "utf8");
         return res.json(request);
