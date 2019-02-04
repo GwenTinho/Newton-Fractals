@@ -38,7 +38,7 @@ function gen(obj) {
 
                 let z = complex.cmx(zx, zy);
 
-                let val = 0;
+                let val = [-1, -1];
 
 
                 for (let iteration = 0; iteration < maxIteration; iteration++) {
@@ -67,7 +67,65 @@ function gen(obj) {
     });
 }
 
+function procedualGen(settings, stepSize, steps) {
+
+    return new Promise(async (res, rej) => {
+        let {
+            image
+        } = await gen(settings);
+
+        console.log("fetched image")
+
+        const grid = image;
+
+        let map = new Array(grid.length);
+
+        map.fill(new Array(grid.length));
+
+        const lminus1 = grid.length - 1;
+
+        for (let j = 0; j < grid.length; j++) {
+            for (let i = 0; i < grid.length; i++) {
+
+                let needsRecalc = false,
+                    x = -1,
+                    y = -1;
+
+                while (y < 2 && !needsRecalc) {
+                    while (x < 2 && !needsRecalc) {
+
+                        if (x === 0 && y === 0) {
+                            x++;
+                            continue;
+                        }
+
+                        const col = x + i;
+                        const row = y + j;
+                        x++;
+                        if (col > lminus1) continue;
+                        if (col < 0) continue;
+                        if (row > lminus1) continue;
+                        if (row < 0) continue;
+
+                        if (grid[row][col][0] !== grid[j][i][0] || grid[row][col][1] !== grid[j][i][1]) needsRecalc = true;
+
+
+                    }
+                    y++;
+                }
+                map[j][i] = needsRecalc;
+            }
+        }
+        res({
+            image: map,
+            w: grid.length,
+            h: grid.length
+        });
+    });
+}
+
 
 export default {
-    gen
+    gen,
+    procedualGen
 }

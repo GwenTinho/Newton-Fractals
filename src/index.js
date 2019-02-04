@@ -21,8 +21,8 @@ app.get("/api/genImageData.json", async (req, res) => {
     try {
         const settings = {
             n: 3,
-            w: 50,
-            h: 50,
+            w: 20,
+            h: 20,
             iterations: 10 // iterations inside of the generator function not related to this one in this scope
         }
 
@@ -44,7 +44,7 @@ app.get("/api/genImageData.json", async (req, res) => {
 
         const promiseStart = performance.now();
 
-        const request = await genImageData.gen(presets.default.getPresetOfOrderN(settings));
+        const request = await genImageData.procedualGen(presets.default.getPresetOfOrderN(settings));
 
         const completingTime = performance.now() - promiseStart;
 
@@ -54,7 +54,9 @@ app.get("/api/genImageData.json", async (req, res) => {
 
         console.log(`finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`);
 
-        fs.writeFileSync("image.json", JSON.stringify(request), "utf8");
+        //console.log(request);
+
+        //fs.writeFileSync("image.json", JSON.stringify(request), "utf8");
         return res.json(request);
     } catch (error) {
         console.error(error.message);

@@ -62,3 +62,7 @@ function hslToRgb(h, s, l) {
 function black(v) {
     return "black";
 }
+
+function white(v) {
+    return "white";
+}
