@@ -20,15 +20,15 @@ app.get("/api/genImageData.json", async (req, res) => {
 
     try {
         const settings = {
-            n: 5,
-            w: 15,
-            h: 15,
-            iterations: 18 // iterations inside of the generator function not related to this one in this scope
+            n: 3,
+            w: 30,
+            h: 30,
+            iterations: 24 // iterations inside of the generator function not related to this one in this scope
         }
 
         const scaling = 2;
-        const steps = 6;
-        const boundaries = 5; // increases drawing precision but slows speed dramaticaly
+        const steps = 5;
+        const boundaries = 4; // increases drawing precision but slows speed dramaticaly
 
         const iterations = settings.n * settings.w * settings.h * settings.iterations * scaling ** (2 * steps); // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / (2 * 3600));
@@ -37,10 +37,10 @@ app.get("/api/genImageData.json", async (req, res) => {
 
         const message = `
 
-        generating a ${settings.w * scaling ** steps} by ${settings.h * scaling ** steps} image ... 
-        expected generation time: ${expectedTimeInHrs}h
-        started at ${expectedTimings.start}
-        expected to end at ${expectedTimings.end}
+generating a ${settings.w * scaling ** steps} by ${settings.h * scaling ** steps} image ... 
+expected generation time: ${expectedTimeInHrs}h
+started at ${expectedTimings.start}
+expected to end at ${expectedTimings.end}
                 
                 `;
 

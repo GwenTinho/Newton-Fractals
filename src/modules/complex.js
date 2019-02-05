@@ -2,6 +2,10 @@ import {
     Decimal
 } from 'decimal.js';
 
+Decimal.set({
+    precision: 30
+});
+
 class Complex {
     constructor(obj) {
         if (obj.type === "cartesian") {

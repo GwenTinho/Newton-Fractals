@@ -1,37 +1,29 @@
 import utils from "./utils";
 import complex from "./complex";
-import {
-    Decimal
-} from 'decimal.js';
 
 function genOne(hy, wx, settings) {
 
     const roots = settings.roots;
-
-    const baseRangeX = [1, settings.w];
-    const baseRangeY = [1, settings.h];
-    const rootlength = roots.length
-    const zx = utils.convertRange(wx + 1, baseRangeX, settings.rangex);
-    const zy = utils.convertRange(hy + 1, baseRangeY, settings.rangey);
+    const maxIteration = settings.maxIteration;
+    const rootlength = roots.length;
+    const zx = utils.convertRange(wx + 1, [1, settings.w], settings.rangex);
+    const zy = utils.convertRange(hy + 1, [1, settings.h], settings.rangey);
 
     let z = complex.cmx(zx, zy);
 
-    let val = [-1, -1];
-
-
-    for (let iteration = 0; iteration < settings.maxIteration; iteration++) {
+    for (let iteration = 0; iteration < maxIteration; iteration++) {
 
         z = complex.newtStep(settings.f, settings.df, z);
 
         for (let i = 0; i < rootlength; i++) {
 
             if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
-                val = [iteration, i];
+                return [iteration, i];
             }
         }
     }
 
-    return val;
+    return [-1, -1];
 }
 
 function genGrid(settings) {
@@ -47,18 +39,26 @@ function genGrid(settings) {
     return grid;
 }
 
-function procedualGen(settings, scaling, steps, boundaries) {
+function procedualGen(settings, scaling, steps, boundaries) { //improve proc gen by reusing maps
 
     return new Promise(async (res, rej) => {
+        console.log("Generating initial grid ...")
+
         let grid = genGrid(settings);
+
+        console.log("Done.");
 
         let outSettings = settings;
 
         for (let index = 0; index < steps; index++) {
+            console.log("Mapping nr. " + (index + 1) + " ...");
             const val = oneStepProcGen(grid, outSettings, scaling, boundaries);
             grid = val.grid;
             outSettings = val.settings;
+            console.log("Done.");
         }
+
+        console.log("Done.\nResolving Promise!");
 
         res({
             image: grid,
@@ -72,12 +72,10 @@ function procedualGen(settings, scaling, steps, boundaries) {
 
 function oneStepProcGen(grid, settings, scaling, boundaries) {
 
-
     const map = getMap(grid, boundaries);
-
     const lMap = map.length;
+    const scaledGrid = multGrid(scaling, grid.length);
 
-    const scaledGrid = multGrid(scaling, grid);
 
     const {
         w,
@@ -118,10 +116,9 @@ function oneStepProcGen(grid, settings, scaling, boundaries) {
 
 }
 
-function multGrid(scaling, grid) {
+function multGrid(scaling, gridlength) {
 
-    const l = grid.length;
-    const scaledL = l * scaling;
+    const scaledL = gridlength * scaling;
     let map = new Array(scaledL);
 
     for (let i = 0; i < scaledL; i++) {
@@ -140,7 +137,6 @@ function getMap(grid, boundaries) {
 
     const boundariesUpper = boundaries;
     const boundariesLower = -boundaries + 1;
-    const restriction = (boundaries - 3) ** 2;
 
     for (let j = 0; j < l; j++) {
         map[j] = new Array(l)
@@ -150,7 +146,7 @@ function getMap(grid, boundaries) {
 
             for (let y = boundariesLower; y < boundariesUpper && !needsRecalc; y++) {
                 for (let x = boundariesLower; x < boundariesUpper && !needsRecalc; x++) {
-                    if (x * x <= restriction && y * y <= restriction) continue;
+                    if (x === 0 && y === 0) continue;
 
                     const col = x + i;
                     const row = y + j;
