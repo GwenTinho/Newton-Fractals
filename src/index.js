@@ -21,13 +21,13 @@ app.get("/api/genImageData.json", async (req, res) => {
     try {
         const settings = {
             n: 5,
-            w: 30,
-            h: 30,
+            w: 15,
+            h: 15,
             iterations: 18 // iterations inside of the generator function not related to this one in this scope
         }
 
         const scaling = 2;
-        const steps = 5;
+        const steps = 6;
         const boundaries = 5; // increases drawing precision but slows speed dramaticaly
 
         const iterations = settings.n * settings.w * settings.h * settings.iterations * scaling ** (2 * steps); // iterations per second average out around 3.6k per second => 3600 / 1000
