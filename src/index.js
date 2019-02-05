@@ -34,10 +34,11 @@ app.get("/api/genImageData.json", async (req, res) => {
         const expectedTimeInMs = Math.floor(iterations * 1000 / (2 * 3600));
         const expectedTimings = utils.default.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
-
+        const imageWidth = settings.w * scaling ** steps;
+        const imageHeight = settings.h * scaling ** steps;
         const message = `
 
-generating a ${settings.w * scaling ** steps} by ${settings.h * scaling ** steps} image ... 
+generating a ${innerWidth} by ${innerHeight} image ... 
 expected generation time: ${expectedTimeInHrs}h
 started at ${expectedTimings.start}
 expected to end at ${expectedTimings.end}
