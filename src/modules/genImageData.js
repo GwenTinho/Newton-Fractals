@@ -6,34 +6,26 @@ import {
 
 function genOne(hy, wx, settings) {
 
-    const
-        f = settings.f,
-        df = settings.df,
-        w = settings.w,
-        h = settings.h,
-        maxIteration = settings.maxIteration,
-        tolerance = settings.tolerance,
-        rangex = settings.rangex,
-        rangey = settings.rangey,
-        roots = settings.roots;
+    const roots = settings.roots;
 
-    const baseRangeX = [1, w];
-    const baseRangeY = [1, h];
+    const baseRangeX = [1, settings.w];
+    const baseRangeY = [1, settings.h];
     const rootlength = roots.length
-    const zx = utils.convertRange(wx + 1, baseRangeX, rangex);
-    const zy = utils.convertRange(hy + 1, baseRangeY, rangey);
+    const zx = utils.convertRange(wx + 1, baseRangeX, settings.rangex);
+    const zy = utils.convertRange(hy + 1, baseRangeY, settings.rangey);
+
     let z = complex.cmx(zx, zy);
 
     let val = [-1, -1];
 
 
-    for (let iteration = 0; iteration < maxIteration; iteration++) {
+    for (let iteration = 0; iteration < settings.maxIteration; iteration++) {
 
-        z = complex.newtStep(f, df, z);
+        z = complex.newtStep(settings.f, settings.df, z);
 
         for (let i = 0; i < rootlength; i++) {
 
-            if (complex.getDist(z, roots[i]).lt(tolerance)) {
+            if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
                 val = [iteration, i];
             }
         }
@@ -43,16 +35,16 @@ function genOne(hy, wx, settings) {
 }
 
 function genGrid(settings) {
-    let map = new Array(settings.h);
+    let grid = new Array(settings.h);
 
     for (let j = 0; j < settings.h; j++) {
-        map[j] = new Array(settings.w);
+        grid[j] = new Array(settings.w);
         for (let i = 0; i < settings.w; i++) {
-            map[j][i] = genOne(j, i, settings);
+            grid[j][i] = genOne(j, i, settings);
         }
     }
 
-    return map;
+    return grid;
 }
 
 function procedualGen(settings, scaling, steps, boundaries) {
@@ -81,35 +73,38 @@ function procedualGen(settings, scaling, steps, boundaries) {
 function oneStepProcGen(grid, settings, scaling, boundaries) {
 
 
-    let map = getMap(grid, boundaries);
+    const map = getMap(grid, boundaries);
 
     const lMap = map.length;
 
     const scaledGrid = multGrid(scaling, grid);
+
+    const {
+        w,
+        h,
+        ...rest
+    } = settings;
+
     const scaledSettings = {
-        f: settings.f,
-        df: settings.df,
         w: settings.w * scaling,
         h: settings.h * scaling,
-        maxIteration: settings.maxIteration,
-        tolerance: settings.tolerance,
-        rangex: settings.rangex,
-        rangey: settings.rangey,
-        roots: settings.roots
+        ...rest
     }
 
     for (let j = 0; j < lMap; j++) {
+        const scaledJ = scaling * j;
         for (let i = 0; i < lMap; i++) {
+            const scaledI = scaling * i;
             if (map[j][i]) {
                 for (let y = 0; y < scaling; y++) {
                     for (let x = 0; x < scaling; x++) {
-                        scaledGrid[y + scaling * j][x + scaling * i] = genOne(y + scaling * j, x + scaling * i, scaledSettings);
+                        scaledGrid[y + scaledJ][x + scaledI] = genOne(y + scaledJ, x + scaledI, scaledSettings);
                     }
                 }
             } else {
                 for (let y = 0; y < scaling; y++) {
                     for (let x = 0; x < scaling; x++) {
-                        scaledGrid[y + scaling * j][x + scaling * i] = grid[j][i];
+                        scaledGrid[y + scaledJ][x + scaledI] = grid[j][i];
                     }
                 }
             }
@@ -126,11 +121,11 @@ function oneStepProcGen(grid, settings, scaling, boundaries) {
 function multGrid(scaling, grid) {
 
     const l = grid.length;
+    const scaledL = l * scaling;
+    let map = new Array(scaledL);
 
-    let map = new Array(l * scaling);
-
-    for (let i = 0; i < l * scaling; i++) {
-        map[i] = new Array(l * scaling);
+    for (let i = 0; i < scaledL; i++) {
+        map[i] = new Array(scaledL);
     }
 
     return map;
@@ -145,6 +140,7 @@ function getMap(grid, boundaries) {
 
     const boundariesUpper = boundaries;
     const boundariesLower = -boundaries + 1;
+    const restriction = (boundaries - 3) ** 2;
 
     for (let j = 0; j < l; j++) {
         map[j] = new Array(l)
@@ -154,7 +150,7 @@ function getMap(grid, boundaries) {
 
             for (let y = boundariesLower; y < boundariesUpper && !needsRecalc; y++) {
                 for (let x = boundariesLower; x < boundariesUpper && !needsRecalc; x++) {
-                    if (x === 0 && y === 0) continue;
+                    if (x * x <= restriction && y * y <= restriction) continue;
 
                     const col = x + i;
                     const row = y + j;

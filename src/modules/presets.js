@@ -33,7 +33,7 @@ function getPresetOfOrderN(settings) {
         w,
         h,
         maxIteration: iterations,
-        tolerance: new Decimal(1e-7),
+        tolerance: new Decimal(1e-15),
         roots,
         rangex: [-1.3, 1.3],
         rangey: [-1.3, 1.3]

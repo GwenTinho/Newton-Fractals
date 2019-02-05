@@ -97,7 +97,7 @@ function newtStep(f, df, z) { //using complextiny
 
 }
 
-function getDist(z, w) {
+function getSqrDist(z, w) {
     let a = z.real.sub(w.real);
     let b = z.imag.sub(w.imag);
     return a.mul(a).add(b.mul(b));
@@ -122,5 +122,5 @@ export default {
     cmx,
     Complex,
     newtStep,
-    getDist
+    getSqrDist
 }
