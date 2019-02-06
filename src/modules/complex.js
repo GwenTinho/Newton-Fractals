@@ -3,7 +3,7 @@ import {
 } from 'decimal.js';
 
 Decimal.set({
-    precision: 30
+    precision: 24
 });
 
 class Complex {

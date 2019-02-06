@@ -1,11 +1,11 @@
-import utils from "./utils";
+import * as utils from "./utils";
 import complex from "./complex";
 import {
     Decimal
 } from "decimal.js";
 
 Decimal.set({
-    precision: 30
+    precision: 24
 });
 
 function getPresetOfOrderN(settings) {
@@ -37,7 +37,7 @@ function getPresetOfOrderN(settings) {
         w,
         h,
         maxIteration: iterations,
-        tolerance: new Decimal("0.00000000000000000001"),
+        tolerance: new Decimal(utils.tenToTheMinus(20)),
         roots,
         rangex: [-1.3, 1.3],
         rangey: [-1.3, 1.3]
