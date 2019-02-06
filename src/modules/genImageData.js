@@ -1,4 +1,4 @@
-import utils from "./utils";
+import * as utils from "./utils";
 import complex from "./complex";
 
 function genOne(hy, wx, settings) {

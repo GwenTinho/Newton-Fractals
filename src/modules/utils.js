@@ -50,11 +50,20 @@ function round(value, digits) {
     return Math.floor(value * 10 ** digits) / 10 ** digits;
 }
 
+function tenToTheMinus(n) {
+    if (n <= 0) return "0";
+    let out = "0.";
+    for (let i = 0; i < n - 1; i++) {
+        out += "0";
+    }
+    return out + "1";
+}
 
-export default {
+export {
     convertRange,
     newtonsmethod,
     newtDiv,
     getStartToEndTimes,
-    round
+    round,
+    tenToTheMinus
 }

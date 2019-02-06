@@ -17,7 +17,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/genImageData.json", async (req, res) => {
-
     try {
         const settings = {
             n: 3,
@@ -32,13 +31,13 @@ app.get("/api/genImageData.json", async (req, res) => {
 
         const iterations = settings.n * settings.w * settings.h * settings.iterations * scaling ** (2 * steps); // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / (2 * 3600));
-        const expectedTimings = utils.default.getStartToEndTimes(expectedTimeInMs);
+        const expectedTimings = utils.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
         const imageWidth = settings.w * scaling ** steps;
         const imageHeight = settings.h * scaling ** steps;
         const message = `
 
-generating a ${innerWidth} by ${innerHeight} image ... 
+generating a ${imageWidth} by ${imageHeight} image ... 
 expected generation time: ${expectedTimeInHrs}h
 started at ${expectedTimings.start}
 expected to end at ${expectedTimings.end}
@@ -55,7 +54,7 @@ expected to end at ${expectedTimings.end}
 
         const iterationsInThousands = Math.floor(iterations / 1000);
         const completingTimeInSeconds = Math.floor(completingTime / 1000);
-        const thousandIterationsPerSecond = utils.default.round(iterations / completingTime, 3);
+        const thousandIterationsPerSecond = utils.round(iterations / completingTime, 3);
 
         console.log(`finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`);
 
