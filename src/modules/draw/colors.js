@@ -1,3 +1,5 @@
+import utils from "../utils";
+
 function colors(v) //Assign a color for each root
 {
     if (v === 0) return "FF0000";
@@ -10,7 +12,7 @@ function colors(v) //Assign a color for each root
 
 function colorsByRoots(roots) {
     return v => {
-        v = Math.floor(convertRange(v, [0, roots], [2 ** 7, 2 ** 24 - 1]));
+        v = Math.floor(utils.convertRange(v, [0, roots], [2 ** 7, 2 ** 24 - 1]));
         v = v.toString(16).toUpperCase();
         return v;
     }
@@ -19,7 +21,7 @@ function colorsByRoots(roots) {
 function colorsByIteration(maxIt) //Assign a color for each root
 {
     return v => {
-        v = Math.floor(convertRange(v, [1, maxIt - 1], [0, 2 ** 24 - 1]));
+        v = Math.floor(utils.convertRange(v, [1, maxIt - 1], [0, 2 ** 24 - 1]));
         if (v === 0) return "000000";
         v = v.toString(16).toUpperCase();
         return v;
@@ -28,8 +30,8 @@ function colorsByIteration(maxIt) //Assign a color for each root
 
 function mapColour(maxIt, rootl) {
     return arr => {
-        const h = convertRange(arr[1], [0, rootl], [0, 240]);
-        const l = convertRange(arr[0], [0, maxIt], [70 - maxIt, 70]);
+        const h = utils.convertRange(arr[1], [0, rootl], [0, 240]);
+        const l = utils.convertRange(arr[0], [0, maxIt], [70 - maxIt, 70]);
         return `hsl(${h},100%,${l}%)`;
     }
 }
@@ -65,4 +67,10 @@ function black(v) {
 
 function white(v) {
     return "white";
+}
+
+export default {
+    white,
+    black,
+    mapColour
 }

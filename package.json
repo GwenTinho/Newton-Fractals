@@ -15,9 +15,8 @@
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
     "babel-preset-env": "^2.0.0-alpha.20",
+    "canvas": "^2.0.1",
     "decimal.js": "^10.0.2",
-    "express": "^4.16.4",
-    "nodemon": "^1.18.9",
-    "serve-static": "^1.13.2"
+    "nodemon": "^1.18.9"
   }
 }
