@@ -26,8 +26,8 @@ app.get("/api/genImageData.json", async (req, res) => {
         }
         const scalingPattern = [4, 3];
         const boundaries = 4; // increases drawing precision but slows speed dramaticaly
-        const iterationScalingFactor = scalingPattern.reduce((acc, currV) => acc *= currV) ** 2;
-        const iterations = settings.n * settings.w * settings.h * settings.iterations * iterationScalingFactor; // iterations per second average out around 3.6k per second => 3600 / 1000
+        const iterationScalingFactor = scalingPattern.reduce((acc, currV) => acc *= currV);
+        const iterations = settings.n * settings.w * settings.h * settings.iterations * iterationScalingFactor ** 2; // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / (2 * 3600));
         const expectedTimings = utils.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
