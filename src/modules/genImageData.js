@@ -1,7 +1,7 @@
 import * as utils from "./utils";
 import complex from "./complex";
 
-function genOne(hy, wx, settings) {
+function getPixelInfo(hy, wx, settings) {
 
     const roots = settings.roots;
     const maxIteration = settings.maxIteration;
@@ -26,13 +26,13 @@ function genOne(hy, wx, settings) {
     return [-1, -1];
 }
 
-function genGrid(settings) {
+function getInitialGrid(settings) {
     let grid = new Array(settings.h);
 
     for (let j = 0; j < settings.h; j++) {
         grid[j] = new Array(settings.w);
         for (let i = 0; i < settings.w; i++) {
-            grid[j][i] = genOne(j, i, settings);
+            grid[j][i] = getPixelInfo(j, i, settings);
         }
     }
 
@@ -44,7 +44,7 @@ function procedualGen(settings, scaling, steps, boundaries) { //improve proc gen
     return new Promise(async (res, rej) => {
         console.log("Generating initial grid ...")
 
-        let grid = genGrid(settings);
+        let grid = getInitialGrid(settings);
 
         console.log("Done.");
 
@@ -72,9 +72,9 @@ function procedualGen(settings, scaling, steps, boundaries) { //improve proc gen
 
 function oneStepProcGen(grid, settings, scaling, boundaries) {
 
-    const map = getMap(grid, boundaries);
+    const map = getOptmizationMap(grid, boundaries);
     const lMap = map.length;
-    const scaledGrid = multGrid(scaling, grid.length);
+    const scaledGrid = scaleGrid(scaling, grid.length);
 
 
     const {
@@ -96,7 +96,7 @@ function oneStepProcGen(grid, settings, scaling, boundaries) {
             if (map[j][i]) {
                 for (let y = 0; y < scaling; y++) {
                     for (let x = 0; x < scaling; x++) {
-                        scaledGrid[y + scaledJ][x + scaledI] = genOne(y + scaledJ, x + scaledI, scaledSettings);
+                        scaledGrid[y + scaledJ][x + scaledI] = getPixelInfo(y + scaledJ, x + scaledI, scaledSettings);
                     }
                 }
             } else {
@@ -116,7 +116,7 @@ function oneStepProcGen(grid, settings, scaling, boundaries) {
 
 }
 
-function multGrid(scaling, gridlength) {
+function scaleGrid(scaling, gridlength) {
 
     const scaledL = gridlength * scaling;
     let map = new Array(scaledL);
@@ -128,7 +128,7 @@ function multGrid(scaling, gridlength) {
     return map;
 }
 
-function getMap(grid, boundaries) {
+function getOptmizationMap(grid, boundaries) {
 
     const lminus1 = grid.length - 1;
     const l = grid.length;
