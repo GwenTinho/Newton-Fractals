@@ -1,4 +1,4 @@
-import * as utils from "./utils";
+import utils from "./utils";
 import complex from "./complex";
 
 function getPixelInfo(hy, wx, settings) {
@@ -39,7 +39,7 @@ function getInitialGrid(settings) {
     return grid;
 }
 
-function procedualGen(settings, scaling, steps, boundaries) { //improve proc gen by reusing maps
+function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen by reusing maps
 
     return new Promise(async (res, rej) => {
         console.log("Generating initial grid ...")
@@ -50,9 +50,10 @@ function procedualGen(settings, scaling, steps, boundaries) { //improve proc gen
 
         let outSettings = settings;
 
-        for (let index = 0; index < steps; index++) {
+        for (let index = 0; index < scalingPattern.length; index++) {
             console.log("Mapping nr. " + (index + 1) + " ...");
-            const val = oneStepProcGen(grid, outSettings, scaling, boundaries);
+            console.log("Scaling by a factor of " + scalingPattern[index] + " in each direction");
+            const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
             grid = val.grid;
             outSettings = val.settings;
             console.log("Done.");

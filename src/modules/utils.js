@@ -59,7 +59,7 @@ function tenToTheMinus(n) {
     return out + "1";
 }
 
-export {
+export default {
     convertRange,
     newtonsmethod,
     newtDiv,

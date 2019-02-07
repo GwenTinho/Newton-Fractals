@@ -1,7 +1,7 @@
 import express from "express";
-import * as presets from "../src/modules/presets";
+import presets from "../src/modules/presets";
 import genImageData from "../src/modules/genImageData";
-import * as utils from "../src/modules/utils";
+import utils from "../src/modules/utils";
 import {
     performance
 } from "perf_hooks";
@@ -24,17 +24,15 @@ app.get("/api/genImageData.json", async (req, res) => {
             h: 30,
             iterations: 35 // iterations inside of the generator function not related to this one in this scope
         }
-
-        const scaling = 4; // looks like higher scaling improves performance
-        const steps = 2;
+        const scalingPattern = [4, 3];
         const boundaries = 4; // increases drawing precision but slows speed dramaticaly
-
-        const iterations = settings.n * settings.w * settings.h * settings.iterations * scaling ** (2 * steps); // iterations per second average out around 3.6k per second => 3600 / 1000
+        const iterationScalingFactor = scalingPattern.reduce((acc, currV) => acc *= currV) ** 2;
+        const iterations = settings.n * settings.w * settings.h * settings.iterations * iterationScalingFactor; // iterations per second average out around 3.6k per second => 3600 / 1000
         const expectedTimeInMs = Math.floor(iterations * 1000 / (2 * 3600));
         const expectedTimings = utils.getStartToEndTimes(expectedTimeInMs);
         const expectedTimeInHrs = Math.floor(expectedTimeInMs / 3600) / 1000;
-        const imageWidth = settings.w * scaling ** steps;
-        const imageHeight = settings.h * scaling ** steps;
+        const imageWidth = settings.w * iterationScalingFactor;
+        const imageHeight = settings.h * iterationScalingFactor;
         const message = `
 
 generating a ${imageWidth} by ${imageHeight} image ... 
@@ -48,7 +46,7 @@ expected to end at ${expectedTimings.end}
 
         const promiseStart = performance.now();
 
-        const request = await genImageData.procedualGen(presets.default.getPresetOfOrderN(settings), scaling, steps, boundaries);
+        const request = await genImageData.procedualGen(presets.getPresetOfOrderN(settings), scalingPattern, boundaries);
 
         const completingTime = performance.now() - promiseStart;
 
