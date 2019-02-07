@@ -30,8 +30,8 @@ function colorsByIteration(maxIt) //Assign a color for each root
 
 function mapColour(maxIt, rootl) {
     return arr => {
-        const h = utils.convertRange(arr[1], [0, rootl], [0, 240]);
-        const l = utils.convertRange(arr[0], [0, maxIt], [70 - maxIt, 70]);
+        const h = utils.convertRange(arr[1], [0, rootl - 1], [0, 240]);
+        const l = utils.convertRange(arr[0], [0, maxIt - 1], [70 - maxIt, 70]);
         return `hsl(${h},100%,${l}%)`;
     }
 }
