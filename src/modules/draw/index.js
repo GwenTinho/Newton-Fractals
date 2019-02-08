@@ -5,9 +5,10 @@ import {
     drawDot
 } from "./draw";
 import colors from "./colors";
+import path from "path";
+import fs from "fs";
 
-function draw(imageData) {
-
+function drawCanvas(imageData) {
     const [image, rootlength, w, h, maxIteration] = [imageData.image, imageData.rootlength, imageData.w, imageData.h, imageData.maxIteration];
 
     const canvas = createCanvas(w, h);
@@ -22,4 +23,17 @@ function draw(imageData) {
     return canvas;
 }
 
-export default draw;
+function drawJPEG(data) {
+    const image = drawCanvas(data);
+
+    const out = fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.jpeg"));
+    const stream = image.createJPEGStream({
+        quality: 0.95,
+        chromaSubsampling: false
+    });
+
+    stream.pipe(out);
+    out.on('finish', () => console.log('The JPEG file was created.'));
+}
+
+export default drawJPEG;

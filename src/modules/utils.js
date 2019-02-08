@@ -1,3 +1,9 @@
+import {
+    performance
+} from "perf_hooks";
+import presets from "./presets";
+import genImageData from "./genImageData";
+
 function convertRange(value, r1, r2) {
     return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
 }
@@ -82,7 +88,7 @@ function getTaskInfos(settings, scalingPattern) {
     };
 }
 
-function getPromiseInfos(completingTime, iterations) {
+function getDataInfos(completingTime, iterations) {
     const iterationsInThousands = Math.floor(iterations / 1000);
     const completingTimeInSeconds = Math.floor(completingTime / 1000);
     const thousandIterationsPerSecond = round(iterations / completingTime, 3);
@@ -90,6 +96,40 @@ function getPromiseInfos(completingTime, iterations) {
     return {
         message: `finished ${iterationsInThousands}k iterations in ${completingTimeInSeconds} seconds (${thousandIterationsPerSecond}k iterations per second)`
     };
+}
+
+function runData(promise, iterations) {
+    const promiseStart = performance.now();
+
+    const request = promise;
+
+    const completingTime = performance.now() - promiseStart;
+
+    const promiseInfos = getDataInfos(completingTime, iterations);
+
+    console.log(promiseInfos.message);
+
+    return request
+}
+
+function getStatistics(settings) {
+    const presetSettings = {
+        w: settings.w,
+        h: settings.h,
+        n: settings.n,
+        iterations: 40,
+    }
+    const boundaries = 4;
+    const scalingPattern = settings.scalingPattern;
+
+    const taskInfos = getTaskInfos(presetSettings, scalingPattern);
+
+    console.log(taskInfos.message);
+
+
+    const data = genImageData.procedualGen(presets.getPresetOfOrderN(presetSettings), scalingPattern, boundaries);
+
+    return runData(data, taskInfos.iterations);
 }
 
 export default {
@@ -100,5 +140,6 @@ export default {
     round,
     tenToTheMinus,
     getTaskInfos,
-    getPromiseInfos
+    runData,
+    getStatistics
 }

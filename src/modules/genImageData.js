@@ -41,34 +41,32 @@ function getInitialGrid(settings) {
 
 function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen by reusing maps
 
-    return new Promise(async (res, rej) => {
-        console.log("Generating initial grid ...")
+    console.log("Generating initial grid ...")
 
-        let grid = getInitialGrid(settings);
+    let grid = getInitialGrid(settings);
 
+    console.log("Done.");
+
+    let outSettings = settings;
+
+    for (let index = 0; index < scalingPattern.length; index++) {
+        console.log("Mapping nr. " + (index + 1) + " ...");
+        console.log("Scaling by a factor of " + scalingPattern[index] + " in each direction");
+        const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
+        grid = val.grid;
+        outSettings = val.settings;
         console.log("Done.");
+    }
 
-        let outSettings = settings;
+    console.log("Done.");
 
-        for (let index = 0; index < scalingPattern.length; index++) {
-            console.log("Mapping nr. " + (index + 1) + " ...");
-            console.log("Scaling by a factor of " + scalingPattern[index] + " in each direction");
-            const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
-            grid = val.grid;
-            outSettings = val.settings;
-            console.log("Done.");
-        }
-
-        console.log("Done.\nResolving Promise!");
-
-        res({
-            image: grid,
-            w: outSettings.w,
-            h: outSettings.h,
-            rootlength: outSettings.roots.length,
-            maxIteration: outSettings.maxIteration
-        });
-    });
+    return {
+        image: grid,
+        w: outSettings.w,
+        h: outSettings.h,
+        rootlength: outSettings.roots.length,
+        maxIteration: outSettings.maxIteration
+    };
 }
 
 function oneStepProcGen(grid, settings, scaling, boundaries) {
