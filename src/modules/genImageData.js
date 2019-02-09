@@ -10,10 +10,9 @@ function getPixelInfo(hy, wx, settings) {
     const zy = utils.convertRange(hy + 1, [1, settings.h], settings.rangey);
 
     let z = complex.cmx(zx, zy);
-
     for (let iteration = 0; iteration < maxIteration; iteration++) {
 
-        z = complex.newtStep(settings.f, settings.df, z);
+        z = settings.usezminusfdivdf ? settings.zminusfdivdf(z) : complex.newtStep(settings.f, settings.df, z);
 
         for (let i = 0; i < rootlength; i++) {
 

@@ -31,8 +31,13 @@ class Complex {
     }
 
     getSubstract(z) {
-        return cmx(this.real.sub(z.real), this.imag.sub(z.imag))
+        return cmx(this.real.sub(z.real), this.imag.sub(z.imag));
     }
+
+    getAddition(z) {
+        return cmx(this.real.add(z.real), this.imag.add(z.imag));
+    }
+
 
     getAbs() {
         let a = this.real;
@@ -72,7 +77,12 @@ class Complex {
         return cmx(this.real, zero.sub(this.imag));
     }
 
+    divByReal(x) {
+        this.real = this.real.div(x);
+        this.imag = this.imag.div(x);
 
+        return this;
+    }
 
     toString() {
         return `${this.real.toString()}   ${this.imag.toString()}`;
@@ -98,7 +108,6 @@ function newtStep(f, df, z) { //using complextiny
     result.imag = a1.mul(d1).add(c1.mul(b1)).div(absSqr);
 
     return cmx(z.real.sub(result.real), z.imag.sub(result.imag));
-
 }
 
 function getSqrDist(z, w) {
@@ -126,5 +135,5 @@ export default {
     cmx,
     Complex,
     newtStep,
-    getSqrDist
+    getSqrDist,
 }

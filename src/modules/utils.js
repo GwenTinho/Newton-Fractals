@@ -75,10 +75,10 @@ function getTaskInfos(settings, scalingPattern) {
     const imageHeight = settings.h * iterationScalingFactor;
     const message = `
     
-    generating a ${imageWidth} by ${imageHeight} image ... 
-    expected generation time: ${expectedTimeInHrs}h
-    started at ${expectedTimings.start}
-    expected to end at ${expectedTimings.end}
+generating a ${imageWidth} by ${imageHeight} image ... 
+expected generation time: ${expectedTimeInHrs}h
+started at ${expectedTimings.start}
+expected to end at ${expectedTimings.end}
                     
                     `;
 
@@ -98,20 +98,6 @@ function getDataInfos(completingTime, iterations) {
     };
 }
 
-function runData(promise, iterations) {
-    const promiseStart = performance.now();
-
-    const request = promise;
-
-    const completingTime = performance.now() - promiseStart;
-
-    const promiseInfos = getDataInfos(completingTime, iterations);
-
-    console.log(promiseInfos.message);
-
-    return request
-}
-
 function getStatistics(settings) {
     const presetSettings = {
         w: settings.w,
@@ -126,10 +112,19 @@ function getStatistics(settings) {
 
     console.log(taskInfos.message);
 
+    const promiseStart = performance.now();
+
 
     const data = genImageData.procedualGen(presets.getPresetOfOrderN(presetSettings), scalingPattern, boundaries);
 
-    return runData(data, taskInfos.iterations);
+    const completingTime = performance.now() - promiseStart;
+
+    const promiseInfos = getDataInfos(completingTime, taskInfos.iterations);
+
+    console.log(promiseInfos.message);
+
+
+    return data
 }
 
 export default {
@@ -140,6 +135,5 @@ export default {
     round,
     tenToTheMinus,
     getTaskInfos,
-    runData,
     getStatistics
 }

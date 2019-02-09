@@ -15,13 +15,11 @@ function getPresetOfOrderN(settings) {
         h = settings.h,
         iterations = settings.iterations;
 
-    let f = z => {
-        let v = z.getCexp(n);
-        v.real = v.real.sub(1);
-        return v;
-    }
-    let df = z => {
-        return z.getCexp(n - 1).multiplyByReal(n);
+    let zminusfdivdf = z => {
+        let v = z.getInstance().multiplyByReal(n - 1);
+        let w = z.getCexp(1 - n);
+        let wplusv = v.getAddition(w)
+        return wplusv.divByReal(n);
     }
 
     let roots = [];
@@ -32,10 +30,10 @@ function getPresetOfOrderN(settings) {
     }
 
     return {
-        f,
-        df,
         w,
         h,
+        zminusfdivdf,
+        usezminusfdivdf: true,
         maxIteration: iterations,
         tolerance: new Decimal(utils.tenToTheMinus(20)),
         roots,
