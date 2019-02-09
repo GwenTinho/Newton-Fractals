@@ -8,11 +8,12 @@ function getPixelInfo(hy, wx, settings) {
     const rootlength = roots.length;
     const zx = utils.convertRange(wx + 1, [1, settings.w], settings.rangex);
     const zy = utils.convertRange(hy + 1, [1, settings.h], settings.rangey);
+    const stepFunction = settings.stepFunction;
 
     let z = complex.cmx(zx, zy);
     for (let iteration = 0; iteration < maxIteration; iteration++) {
 
-        z = settings.usezminusfdivdf ? settings.zminusfdivdf(z) : complex.newtStep(settings.f, settings.df, z);
+        z = stepFunction(z);
 
         for (let i = 0; i < rootlength; i++) {
 

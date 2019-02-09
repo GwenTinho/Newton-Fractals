@@ -15,7 +15,7 @@ function getPresetOfOrderN(settings) {
         h = settings.h,
         iterations = settings.iterations;
 
-    let zminusfdivdf = z => {
+    let stepFunction = z => {
         let v = z.getInstance().multiplyByReal(n - 1);
         let w = z.getCexp(1 - n);
         let wplusv = v.getAddition(w)
@@ -32,8 +32,7 @@ function getPresetOfOrderN(settings) {
     return {
         w,
         h,
-        zminusfdivdf,
-        usezminusfdivdf: true,
+        stepFunction,
         maxIteration: iterations,
         tolerance: new Decimal(utils.tenToTheMinus(20)),
         roots,

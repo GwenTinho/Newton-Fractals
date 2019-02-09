@@ -5,9 +5,9 @@ import drawJPEG from "./modules/draw";
 
 const settings = {
     n: 3,
-    w: 10,
-    h: 10,
-    scalingPattern: [3]
+    w: 30,
+    h: 30,
+    scalingPattern: [4, 3, 2, 2] /// 3.3hrs
 }
 
 drawJPEG(utils.getStatistics(settings));
