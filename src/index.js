@@ -1,13 +1,14 @@
 import utils from "../src/modules/utils";
 import drawJPEG from "./modules/draw";
+import complex from "./modules/complex";
 
 ////settings
 
 const settings = {
-    n: 3,
-    w: 30,
-    h: 30,
-    scalingPattern: [4, 3, 2, 2] /// 3.3hrs
+    n: 10,
+    w: 50,
+    h: 50,
+    scalingPattern: [5, 4, 2] // 9 hrs
 }
 
 drawJPEG(utils.getStatistics(settings));

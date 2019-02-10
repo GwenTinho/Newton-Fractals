@@ -18,7 +18,7 @@ function getPresetOfOrderN(settings) {
     let stepFunction = z => {
         let v = z.getInstance().multiplyByReal(n - 1);
         let w = z.getCexp(1 - n);
-        let wplusv = v.getAddition(w)
+        let wplusv = v.getAddition(w);
         return wplusv.divByReal(n);
     }
 
