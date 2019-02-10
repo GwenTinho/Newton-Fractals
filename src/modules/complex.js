@@ -19,7 +19,6 @@ class Complex {
             this.imag = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
             this.real = this.real.mul(Decimal.cos(obj.val[1]));
             this.imag = this.imag.mul(Decimal.sin(obj.val[1]));
-
         }
     }
 

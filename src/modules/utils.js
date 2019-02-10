@@ -3,6 +3,7 @@ import {
 } from "perf_hooks";
 import presets from "./presets";
 import genImageData from "./genImageData";
+import complex from "./complex";
 
 function convertRange(value, r1, r2) {
     return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
@@ -127,6 +128,23 @@ function getStatistics(settings) {
     return data
 }
 
+function compareRootsToVal(roots, z, tolerance) {
+    let out = false;
+    for (let i = 0; i < roots.length; i++) {
+        out = out || complex.getSqrDist(z, roots[i]).lt(tolerance);
+    }
+    return out;
+}
+
+function findIterationsNeeded(z, tolerance, stepFunction, roots) {
+    let iterationsNeeded = 0;
+    while (!compareRootsToVal(roots, z, tolerance)) {
+        z = stepFunction(z);
+        iterationsNeeded++;
+    }
+    return iterationsNeeded;
+}
+
 export default {
     convertRange,
     newtonsmethod,
@@ -135,5 +153,6 @@ export default {
     round,
     tenToTheMinus,
     getTaskInfos,
-    getStatistics
+    getStatistics,
+    findIterationsNeeded
 }
