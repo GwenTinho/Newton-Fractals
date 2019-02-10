@@ -145,6 +145,14 @@ function findIterationsNeeded(z, tolerance, stepFunction, roots) {
     return iterationsNeeded;
 }
 
+function findMaxIterationPerPixel(sideLength, range, tolerance, stepFunction, roots) {
+    let minValPerPixel = (range[1] - range[0]) / sideLength;
+    const realOnly = findIterationsNeeded(complex.cmx(minValPerPixel, 0), tolerance, stepFunction, roots);
+    const imagOnly = findIterationsNeeded(complex.cmx(0, minValPerPixel), tolerance, stepFunction, roots);
+    const both = findIterationsNeeded(complex.cmx(minValPerPixel, minValPerPixel), tolerance, stepFunction, roots);
+    return Math.min(realOnly, imagOnly, both);
+}
+
 export default {
     convertRange,
     newtonsmethod,
@@ -154,5 +162,6 @@ export default {
     tenToTheMinus,
     getTaskInfos,
     getStatistics,
-    findIterationsNeeded
+    findIterationsNeeded,
+    findMaxIterationPerPixel
 }

@@ -16,14 +16,14 @@ const settings = {
 }
 
 let testPresets = presets.getPresetOfOrderN({
-    n: 4,
+    n: 10,
     w: 0,
     h: 0,
     iterations: 10
 });
 
+// find iteration number from rangex and rangey divided by w and h giving you the smalled possible value per pixel
 
-
-console.log(utils.findIterationsNeeded(complex.cmx(0.01, 0), new Decimal(utils.tenToTheMinus(20)), testPresets.stepFunction, testPresets.roots));
+console.log(utils.findMaxIterationPerPixel(2000, [-1.3, 1.3], new Decimal(utils.tenToTheMinus(20)), testPresets.stepFunction, testPresets.roots));
 
 //drawJPEG(utils.getStatistics(settings));
