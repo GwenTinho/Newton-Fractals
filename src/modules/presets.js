@@ -13,7 +13,8 @@ function getPresetOfOrderN(settings) {
         n = settings.n,
         w = settings.w,
         h = settings.h,
-        iterations = settings.iterations;
+        tolerance = new Decimal(utils.tenToTheMinus(20));
+
 
     let stepFunction = z => {
         let v = z.getInstance().multiplyByReal(n - 1);
@@ -22,6 +23,8 @@ function getPresetOfOrderN(settings) {
         return wplusv.divByReal(n);
     }
 
+
+
     let roots = [];
 
     for (let i = 0; i < n; i++) {
@@ -29,16 +32,24 @@ function getPresetOfOrderN(settings) {
         roots.push(complex.pol(1, pi.mul(2 * i).div(n)));
     }
 
-    return {
-        w,
-        h,
-        stepFunction,
-        maxIteration: iterations,
-        tolerance: new Decimal(utils.tenToTheMinus(20)),
-        roots,
-        rangex: [-1.3, 1.3],
-        rangey: [-1.3, 1.3]
-    };
+    const sideLength = settings.w * settings.scalingPattern.reduce((acc, currV) => acc *= currV);
+
+    const iterations = utils.findMaxIterationPerPixel(sideLength, [-1.3, 1.3], tolerance, stepFunction, roots);
+
+    console.log("Maxiterations for this drawing is " + iterations);
+
+    return () => {
+        return {
+            w,
+            h,
+            stepFunction,
+            maxIteration: iterations,
+            tolerance,
+            roots,
+            rangex: [-1.3, 1.3],
+            rangey: [-1.3, 1.3]
+        };
+    }
 }
 
 export default {

@@ -105,6 +105,7 @@ function getStatistics(settings) {
         h: settings.h,
         n: settings.n,
         iterations: 40,
+        scalingPattern: settings.scalingPattern
     }
     const boundaries = 4;
     const scalingPattern = settings.scalingPattern;
@@ -115,8 +116,9 @@ function getStatistics(settings) {
 
     const promiseStart = performance.now();
 
+    const presetDataFN = presets.getPresetOfOrderN(presetSettings);
 
-    const data = genImageData.procedualGen(presets.getPresetOfOrderN(presetSettings), scalingPattern, boundaries);
+    const data = genImageData.procedualGen(presetDataFN(), scalingPattern, boundaries);
 
     const completingTime = performance.now() - promiseStart;
 
@@ -150,7 +152,7 @@ function findMaxIterationPerPixel(sideLength, range, tolerance, stepFunction, ro
     const realOnly = findIterationsNeeded(complex.cmx(minValPerPixel, 0), tolerance, stepFunction, roots);
     const imagOnly = findIterationsNeeded(complex.cmx(0, minValPerPixel), tolerance, stepFunction, roots);
     const both = findIterationsNeeded(complex.cmx(minValPerPixel, minValPerPixel), tolerance, stepFunction, roots);
-    return Math.min(realOnly, imagOnly, both);
+    return Math.max(realOnly, imagOnly, both);
 }
 
 export default {

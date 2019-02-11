@@ -9,21 +9,22 @@ import presets from "./modules/presets";
 ////settings
 
 const settings = {
-    n: 10,
+    n: 5,
     w: 50,
     h: 50,
-    scalingPattern: [5, 4, 2] // 9 hrs
+    scalingPattern: [4, 2, 5]
 }
 
-let testPresets = presets.getPresetOfOrderN({
-    n: 10,
-    w: 0,
-    h: 0,
-    iterations: 10
-});
+// let testPresets = presets.getPresetOfOrderN({
+//     n: 10,
+//     w: 1,
+//     h: 1,
+//     iterations: 10,
+//     scalingPattern: [4]
+// })();
 
 // find iteration number from rangex and rangey divided by w and h giving you the smalled possible value per pixel
 
-console.log(utils.findMaxIterationPerPixel(2000, [-1.3, 1.3], new Decimal(utils.tenToTheMinus(20)), testPresets.stepFunction, testPresets.roots));
+// console.log(utils.findMaxIterationPerPixel(200, [-1.3, 1.3], new Decimal(utils.tenToTheMinus(20)), testPresets.stepFunction, testPresets.roots));
 
-//drawJPEG(utils.getStatistics(settings));
+drawJPEG(utils.getStatistics(settings));
