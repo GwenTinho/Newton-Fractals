@@ -1,4 +1,5 @@
 import utils from "../utils";
+import Decimal from "decimal.js";
 
 function colors(v) //Assign a color for each root
 {
@@ -31,10 +32,63 @@ function colorsByIteration(maxIt) //Assign a color for each root
 function mapColour(maxIt, rootl) { // note to self: need to find more elegant coloring algorithm that i actually understand
     return arr => {
         const h = utils.convertRange(arr[1], [0, rootl - 1], [0, 240]);
-        const l = utils.convertRange(arr[0], [0, maxIt - 1], [20, 80]);
+        const l = utils.convertRange(arr[0], [0, maxIt - 1], [10, 80]);
         return `hsl(${h},100%,${l}%)`;
     }
 }
+
+function hsvToRgb(h, s, v) {
+    if (v > 1.0) v = 1.0;
+    let hp = h / 60.0;
+    let c = v * s;
+    let x = c * (1 - Math.abs((hp % 2) - 1));
+    let rgb = [0, 0, 0];
+
+    if (0 <= hp && hp < 1) rgb = [c, x, 0];
+    if (1 <= hp && hp < 2) rgb = [x, c, 0];
+    if (2 <= hp && hp < 3) rgb = [0, c, x];
+    if (3 <= hp && hp < 4) rgb = [0, x, c];
+    if (4 <= hp && hp < 5) rgb = [x, 0, c];
+    if (5 <= hp && hp < 6) rgb = [c, 0, x];
+
+    let m = v - c;
+    rgb[0] += m;
+    rgb[1] += m;
+    rgb[2] += m;
+
+    rgb[0] *= 255;
+    rgb[1] *= 255;
+    rgb[2] *= 255;
+    return rgb;
+}
+
+
+// Some constants used with smoothColor
+
+
+function smoothColor(maxIterations, iterationsNeeded, real, imag) {
+    const logBase = 1.0 / Math.log(2.0);
+    const logHalfBase = Math.log(0.5) * logBase;
+
+    imag = parseFloat(imag.toDecimalPlaces(15).toString());
+    real = parseFloat(real.toDecimalPlaces(15).toString());
+
+    const imagsqr = imag * imag;
+    const realsqr = real * real;
+
+    return 5 + n - logHalfBase - Math.log(Math.log(realsqr + imagsqr)) * logBase;
+}
+
+function pickColorHSV1(steps, n, Tr, Ti) {
+    if (n == steps)
+        return "black";
+
+    var v = smoothColor(steps, n, Tr, Ti);
+    var c = hsvToRgb(360.0 * v / steps, 1.0, 1.0);
+    return `rgb(${c})`;
+}
+
+
 
 function hslToRgb(h, s, l) {
     let r, g, b;

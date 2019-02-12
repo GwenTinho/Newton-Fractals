@@ -12,7 +12,7 @@ const settings = {
     n: 10,
     w: 50,
     h: 50,
-    scalingPattern: [4]
+    scalingPattern: [1]
 }
 
 // let testPresets = presets.getPresetOfOrderN({
