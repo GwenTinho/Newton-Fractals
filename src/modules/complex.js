@@ -30,11 +30,11 @@ class Complex {
     }
 
     getSubstract(z) {
-        return cmx(this.real.sub(z.real), this.imag.sub(z.imag));
+        return Complex.cmx(this.real.sub(z.real), this.imag.sub(z.imag));
     }
 
     getAddition(z) {
-        return cmx(this.real.add(z.real), this.imag.add(z.imag));
+        return Complex.cmx(this.real.add(z.real), this.imag.add(z.imag));
     }
 
 
@@ -45,7 +45,7 @@ class Complex {
     }
 
     getInstance() {
-        return cmx(this.real, this.imag);
+        return Complex.cmx(this.real, this.imag);
     }
 
     getArg() {
@@ -53,7 +53,7 @@ class Complex {
     }
 
     getCexp(n) {
-        return pol(Decimal.pow(this.getAbs(), n), this.getArg().mul(n));
+        return Complex.pol(Decimal.pow(this.getAbs(), n), this.getArg().mul(n));
     }
 
     cmultiply(z) {
@@ -73,7 +73,7 @@ class Complex {
 
     getConj() {
         let zero = new Decimal(0);
-        return cmx(this.real, zero.sub(this.imag));
+        return Complex.cmx(this.real, zero.sub(this.imag));
     }
 
     divByReal(x) {
@@ -87,8 +87,7 @@ class Complex {
         return `${this.real.toString()}   ${this.imag.toString()}`;
     }
 }
-
-function newtStep(f, df, z) { //using complextiny
+Complex.newtStep = (f, df, z) => { //using complextiny
     const fz = f(z);
     const dfz = df(z);
 
@@ -96,7 +95,7 @@ function newtStep(f, df, z) { //using complextiny
     const b = dfz.imag;
     const absSqr = a.mul(a).add(b.mul(b));
 
-    let result = cmx(0, 0);
+    let result = Complex.cmx(0, 0);
 
     let a1 = fz.real;
     let b1 = fz.imag;
@@ -106,33 +105,46 @@ function newtStep(f, df, z) { //using complextiny
     result.real = c1.mul(a1).sub(b1.mul(d1)).div(absSqr);
     result.imag = a1.mul(d1).add(c1.mul(b1)).div(absSqr);
 
-    return cmx(z.real.sub(result.real), z.imag.sub(result.imag));
+    return Complex.cmx(z.real.sub(result.real), z.imag.sub(result.imag));
 }
 
-function getSqrDist(z, w) {
+Complex.getSqrDist = (z, w) => {
     let a = z.real.sub(w.real);
     let b = z.imag.sub(w.imag);
     return a.mul(a).add(b.mul(b));
 }
 
-function cmx(x, y) {
+Complex.cmx = (x, y) => {
     return new Complex({
         type: "cartesian",
         val: [x, y]
     });
 }
 
-function pol(r, a) {
+Complex.pol = (r, a) => {
     return new Complex({
         type: "polar",
         val: [r, a]
     });
 }
 
-export default {
-    pol,
-    cmx,
-    Complex,
-    newtStep,
-    getSqrDist,
+Complex.sin = z => {
+    const real = Decimal.sin(z.real).mul(Decimal.cosh(z.imag));
+    const imag = Decimal.cos(z.real).mul(Decimal.sinh(z.imag));
+    return Complex.cmx(real, imag);
 }
+
+Complex.cos = z => {
+    const real = Decimal.cos(z.real).mul(Decimal.cosh(z.imag));
+    const imag = Decimal.sin(z.real).mul(Decimal.sinh(z.imag));
+    return Complex.cmx(real, imag);
+}
+
+Complex.tan = z => {
+    const divisor = Decimal.cos(z.real.mul(2)).add(Decimal.cosh(z.imag.mul(2)));
+    const real = Decimal.sin(z.real.mul(2)).div(divisor);
+    const imag = Decimal.sinh(z.imag.mul(2)).div(divisor);
+    return Complex.cmx(real, imag);
+}
+
+export default Complex

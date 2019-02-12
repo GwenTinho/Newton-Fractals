@@ -9,10 +9,10 @@ import presets from "./modules/presets";
 ////settings
 
 const settings = {
-    n: 5,
+    n: 10,
     w: 50,
     h: 50,
-    scalingPattern: [4, 2, 5]
+    scalingPattern: [4]
 }
 
 // let testPresets = presets.getPresetOfOrderN({
