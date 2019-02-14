@@ -80,12 +80,13 @@ function smoothColor(maxIterations, iterationsNeeded, real, imag) {
 }
 
 function pickColorHSV1(steps, n, Tr, Ti) {
-    if (n == steps)
-        return "black";
+    return arr => {
+        if (n == steps) return "black";
 
-    var v = smoothColor(steps, n, Tr, Ti);
-    var c = hsvToRgb(360.0 * v / steps, 1.0, 1.0);
-    return `rgb(${c})`;
+        let v = smoothColor(steps, n, Tr, Ti);
+        let c = hsvToRgb(360.0 * v / steps, 1.0, 1.0);
+        return `rgb(${c})`;
+    }
 }
 
 

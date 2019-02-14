@@ -1,24 +1,19 @@
-import {
-    Decimal
-} from 'decimal.js';
+import NumberSystem from "./numberSystem";
 
-Decimal.set({
-    precision: 24
-});
 
 class Complex {
     constructor(obj) {
         if (obj.type === "cartesian") {
 
-            this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-            this.imag = (typeof obj.val[1] === "number") ? new Decimal(obj.val[1]) : obj.val[1];
+            this.real = (typeof obj.val[0] === "number") ? new NumberSystem(obj.val[0]) : obj.val[0];
+            this.imag = (typeof obj.val[1] === "number") ? new NumberSystem(obj.val[1]) : obj.val[1];
 
         } else if (obj.type === "polar") {
 
-            this.real = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-            this.imag = (typeof obj.val[0] === "number") ? new Decimal(obj.val[0]) : obj.val[0];
-            this.real = this.real.mul(Decimal.cos(obj.val[1]));
-            this.imag = this.imag.mul(Decimal.sin(obj.val[1]));
+            this.real = (typeof obj.val[0] === "number") ? new NumberSystem(obj.val[0]) : obj.val[0];
+            this.imag = (typeof obj.val[0] === "number") ? new NumberSystem(obj.val[0]) : obj.val[0];
+            this.real = this.real.mul(NumberSystem.cos(obj.val[1]));
+            this.imag = this.imag.mul(NumberSystem.sin(obj.val[1]));
         }
     }
 
@@ -41,7 +36,7 @@ class Complex {
     getAbs() {
         let a = this.real;
         let b = this.imag;
-        return Decimal.sqrt(a.mul(a).add(b.mul(b)));
+        return NumberSystem.sqrt(a.mul(a).add(b.mul(b)));
     }
 
     getInstance() {
@@ -49,11 +44,11 @@ class Complex {
     }
 
     getArg() {
-        return Decimal.atan2(this.imag, this.real);
+        return NumberSystem.atan2(this.imag, this.real);
     }
 
     getCexp(n) {
-        return Complex.pol(Decimal.pow(this.getAbs(), n), this.getArg().mul(n));
+        return Complex.pol(NumberSystem.pow(this.getAbs(), n), this.getArg().mul(n));
     }
 
     cmultiply(z) {
@@ -72,7 +67,7 @@ class Complex {
     }
 
     getConj() {
-        let zero = new Decimal(0);
+        let zero = new NumberSystem(0);
         return Complex.cmx(this.real, zero.sub(this.imag));
     }
 
@@ -86,65 +81,66 @@ class Complex {
     toString() {
         return `${this.real.toString()}   ${this.imag.toString()}`;
     }
-}
-Complex.newtStep = (f, df, z) => { //using complextiny
-    const fz = f(z);
-    const dfz = df(z);
 
-    const a = dfz.real;
-    const b = dfz.imag;
-    const absSqr = a.mul(a).add(b.mul(b));
+    static newtStep(f, df, z) { //using complextiny
+        const fz = f(z);
+        const dfz = df(z);
 
-    let result = Complex.cmx(0, 0);
+        const a = dfz.real;
+        const b = dfz.imag;
+        const absSqr = a.mul(a).add(b.mul(b));
 
-    let a1 = fz.real;
-    let b1 = fz.imag;
-    let c1 = dfz.real;
-    let d1 = dfz.imag.mul(-1);
+        let result = Complex.cmx(0, 0);
 
-    result.real = c1.mul(a1).sub(b1.mul(d1)).div(absSqr);
-    result.imag = a1.mul(d1).add(c1.mul(b1)).div(absSqr);
+        let a1 = fz.real;
+        let b1 = fz.imag;
+        let c1 = dfz.real;
+        let d1 = dfz.imag.mul(-1);
 
-    return Complex.cmx(z.real.sub(result.real), z.imag.sub(result.imag));
-}
+        result.real = c1.mul(a1).sub(b1.mul(d1)).div(absSqr);
+        result.imag = a1.mul(d1).add(c1.mul(b1)).div(absSqr);
 
-Complex.getSqrDist = (z, w) => {
-    let a = z.real.sub(w.real);
-    let b = z.imag.sub(w.imag);
-    return a.mul(a).add(b.mul(b));
-}
+        return Complex.cmx(z.real.sub(result.real), z.imag.sub(result.imag));
+    }
 
-Complex.cmx = (x, y) => {
-    return new Complex({
-        type: "cartesian",
-        val: [x, y]
-    });
-}
+    static getSqrDist(z, w) {
+        let a = z.real.sub(w.real);
+        let b = z.imag.sub(w.imag);
+        return a.mul(a).add(b.mul(b));
+    }
 
-Complex.pol = (r, a) => {
-    return new Complex({
-        type: "polar",
-        val: [r, a]
-    });
-}
+    static cmx(x, y) {
+        return new Complex({
+            type: "cartesian",
+            val: [x, y]
+        });
+    }
 
-Complex.sin = z => {
-    const real = Decimal.sin(z.real).mul(Decimal.cosh(z.imag));
-    const imag = Decimal.cos(z.real).mul(Decimal.sinh(z.imag));
-    return Complex.cmx(real, imag);
-}
+    static pol(r, a) {
+        return new Complex({
+            type: "polar",
+            val: [r, a]
+        });
+    }
 
-Complex.cos = z => {
-    const real = Decimal.cos(z.real).mul(Decimal.cosh(z.imag));
-    const imag = Decimal.sin(z.real).mul(Decimal.sinh(z.imag));
-    return Complex.cmx(real, imag);
-}
+    static sin(z) {
+        const real = NumberSystem.sin(z.real).mul(NumberSystem.cosh(z.imag));
+        const imag = NumberSystem.cos(z.real).mul(NumberSystem.sinh(z.imag));
+        return Complex.cmx(real, imag);
+    }
 
-Complex.tan = z => {
-    const divisor = Decimal.cos(z.real.mul(2)).add(Decimal.cosh(z.imag.mul(2)));
-    const real = Decimal.sin(z.real.mul(2)).div(divisor);
-    const imag = Decimal.sinh(z.imag.mul(2)).div(divisor);
-    return Complex.cmx(real, imag);
+    static cos(z) {
+        const real = NumberSystem.cos(z.real).mul(NumberSystem.cosh(z.imag));
+        const imag = NumberSystem.sin(z.real).mul(NumberSystem.sinh(z.imag));
+        return Complex.cmx(real, imag);
+    }
+
+    static tan(z) {
+        const divisor = NumberSystem.cos(z.real.mul(2)).add(NumberSystem.cosh(z.imag.mul(2)));
+        const real = NumberSystem.sin(z.real.mul(2)).div(divisor);
+        const imag = NumberSystem.sinh(z.imag.mul(2)).div(divisor);
+        return Complex.cmx(real, imag);
+    }
 }
 
 export default Complex

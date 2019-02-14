@@ -59,6 +59,7 @@ function round(value, digits) {
 
 function tenToTheMinus(n) {
     if (n <= 0) return "0";
+    if (n <= 15) return Math.pow(10, -n);
     let out = "0.";
     for (let i = 0; i < n - 1; i++) {
         out += "0";
@@ -127,7 +128,7 @@ function getStatistics(settings) {
     console.log(promiseInfos.message);
 
 
-    return data
+    return data;
 }
 
 function compareRootsToVal(roots, z, tolerance) {

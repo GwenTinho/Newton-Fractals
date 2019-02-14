@@ -1,19 +1,19 @@
+"use strict";
+
 import utils from "./utils";
 import complex from "./complex";
-import {
-    Decimal
-} from "decimal.js";
+import NumberSystem from "./NumberSystem";
 
-Decimal.set({
-    precision: 24
-});
 
 function getPresetOfOrderN(settings) {
+
+
+
     const
         n = settings.n,
         w = settings.w,
         h = settings.h,
-        tolerance = new Decimal(utils.tenToTheMinus(20));
+        tolerance = new NumberSystem(utils.tenToTheMinus(10));
 
 
     let stepFunction = z => {
@@ -23,12 +23,10 @@ function getPresetOfOrderN(settings) {
         return wplusv.divByReal(n);
     }
 
-
-
     let roots = [];
 
     for (let i = 0; i < n; i++) {
-        let pi = Decimal.acos(-1);
+        let pi = NumberSystem.acos(-1);
         roots.push(complex.pol(1, pi.mul(2 * i).div(n)));
     }
 

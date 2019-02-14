@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "nodemon --exec babel-node ./src",
-    "start": "babel-node ./src"
+    "test": "nodemon --exec babel-node --max-old-space-size=8192 ./src",
+    "start": "babel-node --max-old-space-size=8192 ./src"
   },
   "author": "",
   "license": "ISC",

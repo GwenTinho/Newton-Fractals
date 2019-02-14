@@ -1,3 +1,5 @@
+"use strict";
+
 import utils from "./utils";
 import complex from "./complex";
 
@@ -11,11 +13,13 @@ function getPixelInfo(hy, wx, settings) {
     const stepFunction = settings.stepFunction;
 
     let z = complex.cmx(zx, zy);
+
     for (let iteration = 0; iteration < maxIteration; iteration++) {
 
         z = stepFunction(z);
 
         for (let i = 0; i < rootlength; i++) {
+
 
             if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
                 return [iteration, i];
