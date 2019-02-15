@@ -16,7 +16,7 @@ function drawCanvas(imageData) {
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            if (image[y][x][0] !== -1) drawDot(x, y, image[y][x], colors.mapColour(maxIteration, rootlength), ctx);
+            if (image[y][x][0] !== -1) drawDot(x, y, image[y][x], colors.mapSmoothColour(rootlength), ctx);
             else drawDot(x, y, 0, colors.black, ctx);
         }
     }

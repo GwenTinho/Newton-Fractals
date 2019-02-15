@@ -2,6 +2,7 @@
 
 import utils from "./utils";
 import complex from "./complex";
+import NumberSystem from "./numberSystem";
 
 function getPixelInfo(hy, wx, settings) {
 
@@ -15,14 +16,20 @@ function getPixelInfo(hy, wx, settings) {
     let z = complex.cmx(zx, zy);
 
     for (let iteration = 0; iteration < maxIteration; iteration++) {
-
+        let oldZ = z;
         z = stepFunction(z);
 
         for (let i = 0; i < rootlength; i++) {
-
-
             if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
-                return [iteration, i];
+                //console.log(Math.floor(NumberSystem.log(settings.tolerance.div(complex.getSqrDist(oldZ, roots[i]))).div(NumberSystem.log(complex.getSqrDist(z, roots[i]).div(complex.getSqrDist(oldZ, roots[i])))).number * 100))
+                const tolerance = settings.tolerance;
+                const d0 = complex.getSqrDist(oldZ, roots[i]);
+                const d1 = complex.getSqrDist(z, roots[i]);
+                const upperdiv = NumberSystem.log(tolerance.div(d0));
+                const lowerdiv = NumberSystem.log(d1.div(d0));
+                const val = upperdiv.div(lowerdiv);
+
+                return [val, i];
             }
         }
     }

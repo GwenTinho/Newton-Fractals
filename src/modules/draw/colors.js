@@ -37,56 +37,50 @@ function mapColour(maxIt, rootl) { // note to self: need to find more elegant co
     }
 }
 
-function hsvToRgb(h, s, v) {
-    if (v > 1.0) v = 1.0;
-    let hp = h / 60.0;
-    let c = v * s;
-    let x = c * (1 - Math.abs((hp % 2) - 1));
-    let rgb = [0, 0, 0];
-
-    if (0 <= hp && hp < 1) rgb = [c, x, 0];
-    if (1 <= hp && hp < 2) rgb = [x, c, 0];
-    if (2 <= hp && hp < 3) rgb = [0, c, x];
-    if (3 <= hp && hp < 4) rgb = [0, x, c];
-    if (4 <= hp && hp < 5) rgb = [x, 0, c];
-    if (5 <= hp && hp < 6) rgb = [c, 0, x];
-
-    let m = v - c;
-    rgb[0] += m;
-    rgb[1] += m;
-    rgb[2] += m;
-
-    rgb[0] *= 255;
-    rgb[1] *= 255;
-    rgb[2] *= 255;
-    return rgb;
-}
-
-
-// Some constants used with smoothColor
-
-
-function smoothColor(maxIterations, iterationsNeeded, real, imag) {
-    const logBase = 1.0 / Math.log(2.0);
-    const logHalfBase = Math.log(0.5) * logBase;
-
-    imag = parseFloat(imag.toDecimalPlaces(15).toString());
-    real = parseFloat(real.toDecimalPlaces(15).toString());
-
-    const imagsqr = imag * imag;
-    const realsqr = real * real;
-
-    return 5 + n - logHalfBase - Math.log(Math.log(realsqr + imagsqr)) * logBase;
-}
-
-function pickColorHSV1(steps, n, Tr, Ti) {
+function mapSmoothColour(rootl) {
     return arr => {
-        if (n == steps) return "black";
-
-        let v = smoothColor(steps, n, Tr, Ti);
-        let c = hsvToRgb(360.0 * v / steps, 1.0, 1.0);
-        return `rgb(${c})`;
+        const h = utils.convertRange(arr[1], [0, rootl - 1], [0, 240]);
+        const s = arr[0];
+        let out = HSVtoRGB(h / 360, s, 1);
+        return `rgb(${out})`
     }
+}
+
+function HSVtoRGB(h, s, v) {
+    var r, g, b, i, f, p, q, t;
+    if (arguments.length === 1) {
+        s = h.s, v = h.v, h = h.h;
+    }
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0:
+            r = v, g = t, b = p;
+            break;
+        case 1:
+            r = q, g = v, b = p;
+            break;
+        case 2:
+            r = p, g = v, b = t;
+            break;
+        case 3:
+            r = p, g = q, b = v;
+            break;
+        case 4:
+            r = t, g = p, b = v;
+            break;
+        case 5:
+            r = v, g = p, b = q;
+            break;
+    }
+    return [
+        Math.round(r * 255),
+        Math.round(g * 255),
+        Math.round(b * 255)
+    ];
 }
 
 
@@ -116,6 +110,8 @@ function hslToRgb(h, s, l) {
     return [Math.min(Math.floor(r * 256), 255), Math.min(Math.floor(g * 256), 255), Math.min(Math.floor(b * 256), 255)];
 }
 
+
+
 function black(v) {
     return "black";
 }
@@ -127,5 +123,6 @@ function white(v) {
 export default {
     white,
     black,
-    mapColour
+    mapColour,
+    mapSmoothColour
 }

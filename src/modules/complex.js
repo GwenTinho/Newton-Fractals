@@ -109,6 +109,10 @@ class Complex {
         return a.mul(a).add(b.mul(b));
     }
 
+    static getDist(z, w) {
+        return NumberSystem.sqrt(Complex.getSqrDist(z, w));
+    }
+
     static cmx(x, y) {
         return new Complex({
             type: "cartesian",
