@@ -9,7 +9,7 @@ const settings = {
     n: 5,
     w: 50,
     h: 50,
-    scalingPattern: [4]
+    scalingPattern: [8, 4]
 }
 
 drawJPEG(utils.getStatistics(settings));

@@ -10,6 +10,13 @@ function mapColour() { // note to self: need to find more elegant coloring algor
     }
 }
 
+function mapCrazyColour() {
+    return genPixelOutput => {
+        const out = tinyColor.fromRatio(smoothColors.getCrazyHSL(genPixelOutput));
+        return out.toRgbString();
+    }
+}
+
 function mapSmoothColour() {
     return genPixelOutput => {
         const out = tinyColor.fromRatio(smoothColors.getSmoothHSV(genPixelOutput));
@@ -29,5 +36,6 @@ export default {
     white,
     black,
     mapColour,
-    mapSmoothColour
+    mapSmoothColour,
+    mapCrazyColour
 }

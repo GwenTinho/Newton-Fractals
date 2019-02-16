@@ -29,6 +29,29 @@ function getSmoothHSV(genPixelOutput) {
     }
 }
 
+function getCrazyHSL(genPixelOutput) {
+    if (NumberSystem.isVanilla()) {
+        const tolerance = genPixelOutput.squareTolerance; // using formula (log t - log d0) / (log d1 / log d0)
+        const d0 = complex.getSqrDist(genPixelOutput.oldZ, genPixelOutput.root);
+        const d1 = complex.getSqrDist(genPixelOutput.z, genPixelOutput.root);
+        const logd0 = NumberSystem.log(d0);
+
+        const numerator = NumberSystem.log(tolerance).sub(logd0);
+        const denominator = NumberSystem.log(d1).sub(logd0);
+
+        const value = numerator.div(denominator);
+
+        const hsl = {
+            h: utils.convertRange(genPixelOutput.rootIteration, [0, genPixelOutput.rootLength - 1], [0, 240]) / 360,
+            s: 1,
+            l: 1 - value
+        };
+
+        return hsl;
+    }
+}
+
 export default {
-    getSmoothHSV
+    getSmoothHSV,
+    getCrazyHSL
 }
