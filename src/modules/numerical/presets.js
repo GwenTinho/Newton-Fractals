@@ -1,8 +1,8 @@
 "use strict";
 
-import utils from "./utils";
+import utils from "../misc/utils";
 import complex from "./complex";
-import NumberSystem from "./NumberSystem";
+import NumberSystem from "./numberSystem";
 
 
 function getPresetOfOrderN(settings) {
