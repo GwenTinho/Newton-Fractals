@@ -1,6 +1,6 @@
 "use strict";
 
-import utils from "./utils";
+import utils from "../misc/utils";
 import complex from "./complex";
 import NumberSystem from "./numberSystem";
 
@@ -8,7 +8,7 @@ function getPixelInfo(hy, wx, settings) {
 
     const roots = settings.roots;
     const maxIteration = settings.maxIteration;
-    const rootlength = roots.length;
+    const rootLength = roots.length;
     const zx = utils.convertRange(wx + 1, [1, settings.w], settings.rangex);
     const zy = utils.convertRange(hy + 1, [1, settings.h], settings.rangey);
     const stepFunction = settings.stepFunction;
@@ -19,22 +19,27 @@ function getPixelInfo(hy, wx, settings) {
         let oldZ = z;
         z = stepFunction(z);
 
-        for (let i = 0; i < rootlength; i++) {
+        for (let i = 0; i < rootLength; i++) {
             if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
-                //console.log(Math.floor(NumberSystem.log(settings.tolerance.div(complex.getSqrDist(oldZ, roots[i]))).div(NumberSystem.log(complex.getSqrDist(z, roots[i]).div(complex.getSqrDist(oldZ, roots[i])))).number * 100))
-                const tolerance = settings.tolerance;
-                const d0 = complex.getSqrDist(oldZ, roots[i]);
-                const d1 = complex.getSqrDist(z, roots[i]);
-                const upperdiv = NumberSystem.log(tolerance.div(d0));
-                const lowerdiv = NumberSystem.log(d1.div(d0));
-                const val = upperdiv.div(lowerdiv);
 
-                return [val, i];
+                return {
+                    root: roots[i],
+                    rootIteration: i,
+                    rootLength,
+                    squareTolerance: settings.tolerance,
+                    z,
+                    oldZ,
+                    maxIteration,
+                    iteration
+                }
             }
         }
     }
 
-    return [-1, -1];
+    return {
+        iteration: -1,
+        rootIteration: -1,
+    }
 }
 
 function getInitialGrid(settings) {
@@ -75,8 +80,6 @@ function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen
         image: grid,
         w: outSettings.w,
         h: outSettings.h,
-        rootlength: outSettings.roots.length,
-        maxIteration: outSettings.maxIteration
     };
 }
 
@@ -166,7 +169,7 @@ function getOptmizationMap(grid, boundaries) {
                     if (row > lminus1) continue;
                     if (row < 0) continue;
 
-                    if (grid[row][col][0] !== grid[j][i][0] || grid[row][col][1] !== grid[j][i][1]) needsRecalc = true;
+                    if (grid[row][col].iteration !== grid[j][i].iteration || grid[row][col].rootIteration !== grid[j][i].rootIteration) needsRecalc = true;
                 }
             }
             map[j][i] = needsRecalc;

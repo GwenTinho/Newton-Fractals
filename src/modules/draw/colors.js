@@ -1,116 +1,21 @@
-import utils from "../utils";
-import Decimal from "decimal.js";
+import utils from "../misc/utils";
+import tinyColor from "tinycolor2";
+import smoothColors from "./colorSmoothing";
 
-function colors(v) //Assign a color for each root
-{
-    if (v === 0) return "FF0000";
-    if (v === 1) return "00FF00";
-    if (v === 2) return "0000FF";
-    if (v === 3) return "00FFFF";
-    if (v === 4) return "FF69B4";
-}
-
-
-function colorsByRoots(roots) {
-    return v => {
-        v = Math.floor(utils.convertRange(v, [0, roots], [2 ** 7, 2 ** 24 - 1]));
-        v = v.toString(16).toUpperCase();
-        return v;
-    }
-}
-
-function colorsByIteration(maxIt) //Assign a color for each root
-{
-    return v => {
-        v = Math.floor(utils.convertRange(v, [1, maxIt - 1], [0, 2 ** 24 - 1]));
-        if (v === 0) return "000000";
-        v = v.toString(16).toUpperCase();
-        return v;
-    }
-}
-
-function mapColour(maxIt, rootl) { // note to self: need to find more elegant coloring algorithm that i actually understand
-    return arr => {
-        const h = utils.convertRange(arr[1], [0, rootl - 1], [0, 240]);
-        const l = utils.convertRange(arr[0], [0, maxIt - 1], [10, 80]);
+function mapColour() { // note to self: need to find more elegant coloring algorithm that i actually understand
+    return genPixelOutput => {
+        const h = utils.convertRange(genPixelOutput.rootIteration, [0, genPixelOutput.rootLength - 1], [0, 240]);
+        const l = utils.convertRange(genPixelOutput.iteration, [0, genPixelOutput.maxIteration - 1], [10, 80]);
         return `hsl(${h},100%,${l}%)`;
     }
 }
 
-function mapSmoothColour(rootl) {
-    return arr => {
-        const h = utils.convertRange(arr[1], [0, rootl - 1], [0, 240]);
-        const s = arr[0];
-        let out = HSVtoRGB(h / 360, s, 1);
-        return `rgb(${out})`
+function mapSmoothColour() {
+    return genPixelOutput => {
+        const out = tinyColor.fromRatio(smoothColors.getSmoothHSV(genPixelOutput));
+        return out.toRgbString();
     }
 }
-
-function HSVtoRGB(h, s, v) {
-    var r, g, b, i, f, p, q, t;
-    if (arguments.length === 1) {
-        s = h.s, v = h.v, h = h.h;
-    }
-    i = Math.floor(h * 6);
-    f = h * 6 - i;
-    p = v * (1 - s);
-    q = v * (1 - f * s);
-    t = v * (1 - (1 - f) * s);
-    switch (i % 6) {
-        case 0:
-            r = v, g = t, b = p;
-            break;
-        case 1:
-            r = q, g = v, b = p;
-            break;
-        case 2:
-            r = p, g = v, b = t;
-            break;
-        case 3:
-            r = p, g = q, b = v;
-            break;
-        case 4:
-            r = t, g = p, b = v;
-            break;
-        case 5:
-            r = v, g = p, b = q;
-            break;
-    }
-    return [
-        Math.round(r * 255),
-        Math.round(g * 255),
-        Math.round(b * 255)
-    ];
-}
-
-
-
-function hslToRgb(h, s, l) {
-    let r, g, b;
-
-    if (s == 0) {
-        r = g = b = l; // achromatic
-    } else {
-        let hue2rgb = function hue2rgb(p, q, t) {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-            if (t < 1 / 6) return p + (q - p) * 6 * t;
-            if (t < 1 / 2) return q;
-            if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-            return p;
-        }
-
-        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        let p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
-    }
-
-    return [Math.min(Math.floor(r * 256), 255), Math.min(Math.floor(g * 256), 255), Math.min(Math.floor(b * 256), 255)];
-}
-
-
 
 function black(v) {
     return "black";

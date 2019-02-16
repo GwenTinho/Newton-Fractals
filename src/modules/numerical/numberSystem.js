@@ -69,6 +69,10 @@ class Vanilla {
     static log(number) {
         return Vanilla.instance(Math.log(Vanilla.checkAndReturn(number)));
     }
+
+    static isVanilla() {
+        return true;
+    }
 }
 
 function numberSysFactory(settings) { // type: string (vanilla or bigFloat), if bigfloat precision : int

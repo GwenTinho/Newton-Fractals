@@ -9,14 +9,14 @@ import path from "path";
 import fs from "fs";
 
 function drawCanvas(imageData) {
-    const [image, rootlength, w, h, maxIteration] = [imageData.image, imageData.rootlength, imageData.w, imageData.h, imageData.maxIteration];
+    const [image, w, h] = [imageData.image, imageData.w, imageData.h];
 
     const canvas = createCanvas(w, h);
     const ctx = canvas.getContext("2d");
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            if (image[y][x][0] !== -1) drawDot(x, y, image[y][x], colors.mapSmoothColour(rootlength), ctx);
+            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapColour(), ctx); // rn theres mapColour and mapSmoothColor
             else drawDot(x, y, 0, colors.black, ctx);
         }
     }

@@ -1,9 +1,9 @@
 import {
     performance
 } from "perf_hooks";
-import presets from "./presets";
-import genImageData from "./genImageData";
-import complex from "./complex";
+import presets from "../numerical/presets";
+import genImageData from "../numerical/genImageData";
+import complex from "../numerical/complex";
 
 function convertRange(value, r1, r2) {
     return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0];
