@@ -42,9 +42,9 @@ function getCrazyHSL(genPixelOutput) {
         const value = numerator.div(denominator);
 
         const hsl = {
-            h: utils.convertRange(genPixelOutput.rootIteration, [0, genPixelOutput.rootLength - 1], [0, 240]) / 360,
-            s: 1,
-            l: 1 - value
+            h: utils.convertRange(genPixelOutput.rootIteration, [0, genPixelOutput.rootLength - 1], [0, 240]),
+            s: 100,
+            l: utils.convertRange(value * 100, [0, 100], [20, 80])
         };
 
         return hsl;
