@@ -106,6 +106,7 @@ function getStatistics(settings) {
         h: settings.h,
         n: settings.n,
         iterations: 40,
+        a: settings.a,
         scalingPattern: settings.scalingPattern
     }
     const boundaries = 4;

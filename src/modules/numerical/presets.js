@@ -13,12 +13,15 @@ function getPresetOfOrderN(settings) {
         n = settings.n,
         w = settings.w,
         h = settings.h,
+        a = settings.a,
         tolerance = new NumberSystem(utils.tenToTheMinus(10));
 
 
+    const complexA = complex.cmx(a.real, a.imag);
+
     let stepFunction = z => {
-        let v = z.getInstance().multiplyByReal(n - 1);
-        let w = z.getCexp(1 - n);
+        let v = z.getInstance().cmultiply(complex.cmx(n - a.real, a.imag));
+        let w = z.getCexp(1 - n).cmultiply(complexA);
         let wplusv = v.getAddition(w);
         return wplusv.divByReal(n);
     }
@@ -31,6 +34,8 @@ function getPresetOfOrderN(settings) {
     }
 
     const sideLength = settings.w * settings.scalingPattern.reduce((acc, currV) => acc *= currV);
+
+    console.log("Getting max iterations...");
 
     const iterations = utils.findMaxIterationPerPixel(sideLength, [-1.3, 1.3], tolerance, stepFunction, roots);
 
