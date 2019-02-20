@@ -3,8 +3,8 @@
     "w": 50,
     "h": 50,
     "a": {
-        "real": 0.1,
-        "imag": 0
+        "real": 1,
+        "imag": 0.9
     },
     "scalingPattern": [8, 4]
 }

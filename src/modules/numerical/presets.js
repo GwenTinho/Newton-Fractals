@@ -19,8 +19,10 @@ function getPresetOfOrderN(settings) {
 
     const complexA = complex.cmx(a.real, a.imag);
 
+    let baseRange // = [-100, 100]
+
     let stepFunction = z => {
-        let v = z.getInstance().cmultiply(complex.cmx(n - a.real, a.imag));
+        let v = z.getInstance().cmultiply(complex.cmx(n - a.real, -a.imag));
         let w = z.getCexp(1 - n).cmultiply(complexA);
         let wplusv = v.getAddition(w);
         return wplusv.divByReal(n);
@@ -37,7 +39,7 @@ function getPresetOfOrderN(settings) {
 
     console.log("Getting max iterations...");
 
-    const iterations = utils.findMaxIterationPerPixel(sideLength, [-1.3, 1.3], tolerance, stepFunction, roots);
+    const iterations = utils.findMaxIterationPerPixel(sideLength, baseRange || [-1.3, 1.3], tolerance, stepFunction, roots);
 
     console.log("Maxiterations for this drawing is " + iterations);
 
@@ -49,8 +51,8 @@ function getPresetOfOrderN(settings) {
             maxIteration: iterations,
             tolerance,
             roots,
-            rangex: [-1.3, 1.3],
-            rangey: [-1.3, 1.3]
+            rangex: baseRange || [-1.3, 1.3],
+            rangey: baseRange || [-1.3, 1.3]
         };
     }
 }
