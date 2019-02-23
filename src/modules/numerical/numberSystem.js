@@ -66,12 +66,16 @@ class Vanilla {
         if (typeof number.number === "number") return number.number;
     }
 
-    static log(number) {
+    static ln(number) {
         return Vanilla.instance(Math.log(Vanilla.checkAndReturn(number)));
     }
 
     static isVanilla() {
         return true;
+    }
+
+    static exp(number) {
+        return Vanilla.instance(Math.exp(Vanilla.checkAndReturn(number)));
     }
 }
 

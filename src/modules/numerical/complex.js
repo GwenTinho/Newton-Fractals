@@ -78,6 +78,10 @@ class Complex {
         return this;
     }
 
+    getZToTheIthPower() {
+        return Complex.pol(NumberSystem.exp(this.getArg().mul(-1)), NumberSystem.ln(this.getAbsSquared()).mul(0.5));
+    }
+
     toString() {
         return `${this.real.toString()}   ${this.imag.toString()}`;
     }
@@ -144,6 +148,10 @@ class Complex {
         const real = NumberSystem.sin(z.real.mul(2)).div(divisor);
         const imag = NumberSystem.sinh(z.imag.mul(2)).div(divisor);
         return Complex.cmx(real, imag);
+    }
+
+    static cpow(z, w) {
+        return z.getCexp(w.real).cmultiply(z.getCexp(w.imag).getZToTheIthPower());
     }
 }
 

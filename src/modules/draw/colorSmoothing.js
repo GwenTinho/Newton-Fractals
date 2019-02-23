@@ -9,10 +9,10 @@ function getSmoothHSV(genPixelOutput) {
         const tolerance = genPixelOutput.squareTolerance; // using formula (log t - log d0) / (log d1 / log d0)
         const d0 = complex.getSqrDist(genPixelOutput.oldZ, genPixelOutput.root);
         const d1 = complex.getSqrDist(genPixelOutput.z, genPixelOutput.root);
-        const logd0 = NumberSystem.log(d0);
+        const logd0 = NumberSystem.ln(d0);
 
-        const numerator = NumberSystem.log(tolerance).sub(logd0);
-        const denominator = NumberSystem.log(d1).sub(logd0);
+        const numerator = NumberSystem.ln(tolerance).sub(logd0);
+        const denominator = NumberSystem.ln(d1).sub(logd0);
 
         const value = numerator.div(denominator).number;
 
@@ -34,10 +34,10 @@ function getCrazyHSL(genPixelOutput) {
         const tolerance = genPixelOutput.squareTolerance; // using formula (log t - log d0) / (log d1 / log d0)
         const d0 = complex.getSqrDist(genPixelOutput.oldZ, genPixelOutput.root);
         const d1 = complex.getSqrDist(genPixelOutput.z, genPixelOutput.root);
-        const logd0 = NumberSystem.log(d0);
+        const logd0 = NumberSystem.ln(d0);
 
-        const numerator = NumberSystem.log(tolerance).sub(logd0);
-        const denominator = NumberSystem.log(d1).sub(logd0);
+        const numerator = NumberSystem.ln(tolerance).sub(logd0);
+        const denominator = NumberSystem.ln(d1).sub(logd0);
 
         const value = numerator.div(denominator);
 

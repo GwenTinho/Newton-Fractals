@@ -16,7 +16,7 @@ function drawCanvas(imageData) {
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapColour(), ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
+            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapCrazyColour(), ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
             else drawDot(x, y, 0, colors.black, ctx);
         }
     }

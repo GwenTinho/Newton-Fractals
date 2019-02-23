@@ -2,7 +2,6 @@
 
 import utils from "../misc/utils";
 import complex from "./complex";
-import NumberSystem from "./numberSystem";
 
 function getPixelInfo(hy, wx, settings) {
 
