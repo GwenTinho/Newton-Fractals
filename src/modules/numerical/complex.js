@@ -86,7 +86,7 @@ class Complex {
         return `${this.real.toString()}   ${this.imag.toString()}`;
     }
 
-    static newtStep(f, df, z) { //using complextiny
+    static newtStep(f, df, z) {
         const fz = f(z);
         const dfz = df(z);
 

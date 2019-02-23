@@ -157,6 +157,16 @@ function findMaxIterationPerPixel(sideLength, range, tolerance, stepFunction, ro
     return Math.max(realOnly, imagOnly, both);
 }
 
+function findRoot(startpoint, f, df, tolerance) {
+    let z = startpoint;
+
+    while (!f(z).lt(tolerance)) {
+        z = complex.newtStep(f, df, z);
+    }
+
+    return z;
+}
+
 export default {
     convertRange,
     newtonsmethod,
@@ -167,5 +177,6 @@ export default {
     getTaskInfos,
     getStatistics,
     findIterationsNeeded,
-    findMaxIterationPerPixel
+    findMaxIterationPerPixel,
+    findRoot
 }
