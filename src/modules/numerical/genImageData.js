@@ -75,6 +75,10 @@ function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen
 
     console.log("Done.");
 
+    const avgiterations = getAvgIterations(grid);
+
+    console.log("Avg iterations needed: " + avgiterations);
+
     return {
         image: grid,
         w: outSettings.w,
@@ -175,6 +179,19 @@ function getOptmizationMap(grid, boundaries) {
         }
     }
     return map;
+}
+
+function getAvgIterations(grid) {
+    const l = grid.length;
+    let avg = 0;
+    let n = 0;
+    for (let j = 0; j < l; j++) {
+        for (let i = 0; i < l; i++) {
+            avg = (avg * n + grid[j][i].iteration) / (n + 1);
+            n++;
+        }
+    }
+    return avg;
 }
 
 
