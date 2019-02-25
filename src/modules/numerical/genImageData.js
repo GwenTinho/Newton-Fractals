@@ -60,20 +60,14 @@ function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen
 
     let grid = getInitialGrid(settings);
 
-    console.log("Done.");
-
     let outSettings = settings;
 
     for (let index = 0; index < scalingPattern.length; index++) {
-        console.log("Mapping nr. " + (index + 1) + " ...");
-        console.log("Scaling by a factor of " + scalingPattern[index] + " in each direction");
+        console.log("Scaling by a factor of " + scalingPattern[index] + " ...");
         const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
         grid = val.grid;
         outSettings = val.settings;
-        console.log("Done.");
     }
-
-    console.log("Done.");
 
     const avgiterations = getAvgIterations(grid);
 

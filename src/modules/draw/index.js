@@ -7,6 +7,7 @@ import {
 import colors from "./colors";
 import path from "path";
 import fs from "fs";
+import GIFEncoder from "gifencoder";
 
 function drawCanvas(imageData) {
     const [image, w, h] = [imageData.image, imageData.w, imageData.h];
@@ -16,15 +17,18 @@ function drawCanvas(imageData) {
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapCrazyColour(), ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
+            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapColour(), ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
             else drawDot(x, y, 0, colors.black, ctx);
         }
     }
-    return canvas;
+    return {
+        canvas,
+        ctx
+    };
 }
 
 function drawJPEG(data) {
-    const image = drawCanvas(data);
+    const image = drawCanvas(data).canvas;
 
     const out = fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.jpeg"));
     const stream = image.createJPEGStream({
@@ -36,4 +40,39 @@ function drawJPEG(data) {
     out.on('finish', () => console.log('The JPEG file was created.'));
 }
 
-export default drawJPEG;
+function drawGifFromGalery(galeryData) {
+
+    const encoder = new GIFEncoder(galeryData.w, galeryData.h);
+    // stream the results as they are available into myanimated.gif
+    encoder.createReadStream().pipe(fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.gif")));
+
+    encoder.start();
+    encoder.setRepeat(0); // 0 for repeat, -1 for no-repeat
+    encoder.setDelay(10); // frame delay in ms
+    encoder.setQuality(10); // image quality. 10 is default.
+
+
+    const galery = galeryData.galery;
+
+    for (let index = 0; index < galery.length; index++) {
+        let frame = drawCanvas({
+            image: galery[index],
+            w: galeryData.w,
+            h: galeryData.h
+        }).ctx;
+
+        encoder.addFrame(frame);
+
+        galery[index] = null;
+    }
+
+    encoder.finish();
+    console.log("The GIF file was created.");
+}
+
+
+export default {
+    drawJPEG,
+    drawGifFromGalery,
+    drawCanvas
+};
