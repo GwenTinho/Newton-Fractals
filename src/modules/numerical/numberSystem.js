@@ -10,7 +10,7 @@ class Vanilla {
     }
 
     mul(number) {
-        return Vanilla.instance(Vanilla.checkAndReturn(number) * this.number);
+        return Vanilla.instance(Vanilla.checkAndReturn(number) * this.number); // this === instance of Vanilla // this.__proto__.constructor ==== Vanilla
     }
 
     sub(number) {
@@ -34,31 +34,31 @@ class Vanilla {
     }
 
     static sqrt(number) {
-        return Vanilla.instance(Math.sqrt(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.sqrt(this.checkAndReturn(number))); // here this ==== Vanilla
     }
 
     static cos(number) {
-        return Vanilla.instance(Math.cos(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.cos(this.checkAndReturn(number)));
     }
 
     static sin(number) {
-        return Vanilla.instance(Math.sin(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.sin(this.checkAndReturn(number)));
     }
 
     static atan2(y, x) {
-        return Vanilla.instance(Math.atan2(Vanilla.checkAndReturn(y), Vanilla.checkAndReturn(x)));
+        return this.instance(Math.atan2(this.checkAndReturn(y), this.checkAndReturn(x)));
     }
 
     static pow(base, exponent) {
-        return Vanilla.instance(Math.pow(Vanilla.checkAndReturn(base), Vanilla.checkAndReturn(exponent)));
+        return this.instance(Math.pow(this.checkAndReturn(base), this.checkAndReturn(exponent)));
     }
 
     static acos(number) {
-        return Vanilla.instance(Math.acos(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.acos(this.checkAndReturn(number)));
     }
 
     static instance(number) {
-        return new Vanilla(number);
+        return new this(number);
     }
 
     static checkAndReturn(number) {
@@ -67,7 +67,7 @@ class Vanilla {
     }
 
     static ln(number) {
-        return Vanilla.instance(Math.log(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.log(this.checkAndReturn(number)));
     }
 
     static isVanilla() {
@@ -75,7 +75,7 @@ class Vanilla {
     }
 
     static exp(number) {
-        return Vanilla.instance(Math.exp(Vanilla.checkAndReturn(number)));
+        return this.instance(Math.exp(this.checkAndReturn(number)));
     }
 }
 
