@@ -3,11 +3,9 @@
 import utils from "../misc/utils";
 import complex from "./complex";
 import NumberSystem from "./numberSystem";
-
+import helperFunctions from "./helperfunctions";
 
 function getPresetOfOrderN(settings) {
-
-
 
     const
         n = settings.n,
@@ -39,7 +37,7 @@ function getPresetOfOrderN(settings) {
 
     console.log("Getting max iterations...");
 
-    const iterations = utils.findMaxIterationPerPixel(sideLength, baseRange || [-1.3, 1.3], tolerance, stepFunction, roots);
+    const iterations = helperFunctions.findMaxIterationPerPixel(sideLength, baseRange || [-1.3, 1.3], tolerance, stepFunction, roots);
 
     console.log("Maxiterations for this drawing is " + iterations);
 

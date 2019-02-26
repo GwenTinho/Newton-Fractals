@@ -44,7 +44,7 @@ function drawGifFromGalery(galeryData) {
 
     const encoder = new GIFEncoder(galeryData.w, galeryData.h);
     // stream the results as they are available into myanimated.gif
-    encoder.createReadStream().pipe(fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.gif")));
+    encoder.createReadStream().pipe(fs.createWriteStream(path.join(__dirname, "/../../../../recent images", "/fractal.gif")));
 
     encoder.start();
     encoder.setRepeat(0); // 0 for repeat, -1 for no-repeat
