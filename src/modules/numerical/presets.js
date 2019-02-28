@@ -93,8 +93,8 @@ function getSinePreset(settings) {
             maxIteration: iterations,
             tolerance,
             roots,
-            rangex: baseRange || [1, 1.9],
-            rangey: baseRange || [-0.1, 0.1]
+            rangex: baseRange || [1.1, 2],
+            rangey: baseRange || [-0.2, 0.2]
         };
     }
 }
