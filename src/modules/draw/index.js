@@ -4,31 +4,35 @@ import {
 import {
     drawDot
 } from "./draw";
-import colors from "./colors";
+import colorsAlgs from "./coloralgs";
+import simpleColors from "./simplecolors";
 import path from "path";
 import fs from "fs";
 import GIFEncoder from "gifencoder";
 
-function drawCanvas(imageData) {
+function drawCanvas(imageData, colorAlgIndex) {
     const [image, w, h] = [imageData.image, imageData.w, imageData.h];
 
     const canvas = createCanvas(w, h);
     const ctx = canvas.getContext("2d");
+    const colorFN = colorsAlgs[Object.keys(colorsAlgs)[colorAlgIndex]]();
+
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
-            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colors.mapColour(), ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
-            else drawDot(x, y, 0, colors.black, ctx);
+            if (image[y][x].iteration !== -1) drawDot(x, y, image[y][x], colorFN, ctx); // rn theres mapColour and mapSmoothColor & mapcrazycolor idea of generating galeries
+            else drawDot(x, y, 0, simpleColors.black, ctx);
         }
     }
+
     return {
         canvas,
         ctx
     };
 }
 
-function drawJPEG(data) {
-    const image = drawCanvas(data).canvas;
+function drawJPEG(data, colorAlgIndex) {
+    const image = drawCanvas(data, colorAlgIndex).canvas;
 
     const out = fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.jpeg"));
     const stream = image.createJPEGStream({

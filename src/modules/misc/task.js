@@ -78,7 +78,7 @@ function getStatistics(settings) {
 
     console.log(taskInfos.message);
 
-    const presetDataFN = presets.getPresetOfOrderN(presetSettings);
+    const presetDataFN = Object.keys(presets)[settings.presetIndex](presetSettings);
 
     const {
         data,

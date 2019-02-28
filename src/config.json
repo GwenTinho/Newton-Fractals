@@ -1,11 +1,12 @@
 {
-    "n": 3,
+    "n": 20,
     "w": 40,
     "h": 40,
     "a": {
         "real": 1,
         "imag": 0
     },
-
+    "coloringAlgIndex": 2,
+    "presetIndex": 1,
     "scalingPattern": [5, 4]
 }

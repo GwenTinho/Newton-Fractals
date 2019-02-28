@@ -32,11 +32,11 @@ function generateAndDrawGalery(settings) {
 
         const scalingPattern = settings.scalingPattern;
 
-        const presetDataFN = presets.getPresetOfOrderN(presetSettings);
+        const presetDataFN = presets[Object.keys(presets)[settings.presetIndex]](presetSettings);
 
         const data = genImageData.procedualGen(presetDataFN(), scalingPattern, boundaries);
 
-        let frame = draw.drawCanvas(data).ctx;
+        let frame = draw.drawCanvas(data, settings.coloringAlgIndex).ctx;
 
         encoder.addFrame(frame);
 

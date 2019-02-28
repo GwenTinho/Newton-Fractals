@@ -55,6 +55,51 @@ function getPresetOfOrderN(settings) {
     }
 }
 
+function getSinePreset(settings) {
+    const
+        n = settings.n,
+        w = settings.w,
+        h = settings.h,
+        a = settings.a,
+        tolerance = new NumberSystem(utils.tenToTheMinus(14));
+
+
+    const complexA = complex.cmx(a.real, a.imag);
+
+    let baseRange // [-0, 2]
+
+    let stepFunction = z => z.getSubstract(complex.tan(z).cmultiply(complexA));
+
+    const pi = NumberSystem.acos(-1);
+
+    let roots = [complex.cmx(0, 0)];
+
+    for (let i = 1; i < n; i++) {
+        roots.push(complex.cmx(pi.mul(i), 0));
+        roots.push(complex.cmx(pi.mul(-i), 0));
+    }
+
+    console.log("Getting max iterations...");
+
+    const iterations = 250;
+
+    console.log("Maxiterations for this drawing is " + iterations);
+
+    return () => {
+        return {
+            w,
+            h,
+            stepFunction,
+            maxIteration: iterations,
+            tolerance,
+            roots,
+            rangex: baseRange || [1, 1.9],
+            rangey: baseRange || [-0.1, 0.1]
+        };
+    }
+}
+
 export default {
-    getPresetOfOrderN
+    getPresetOfOrderN,
+    getSinePreset
 }

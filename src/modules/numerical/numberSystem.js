@@ -45,6 +45,14 @@ class Vanilla {
         return this.instance(Math.sin(this.checkAndReturn(number)));
     }
 
+    static cosh(number) {
+        return this.instance(Math.cosh(this.checkAndReturn(number)));
+    }
+
+    static sinh(number) {
+        return this.instance(Math.sinh(this.checkAndReturn(number)));
+    }
+
     static atan2(y, x) {
         return this.instance(Math.atan2(this.checkAndReturn(y), this.checkAndReturn(x)));
     }
