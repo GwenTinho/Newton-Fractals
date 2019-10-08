@@ -5,6 +5,11 @@ import GIFEncoder from "gifencoder";
 import draw from "../draw";
 import presets from "../numerical/presets";
 
+/**
+ * 
+ * @param {*} settings uses given settings from the constructor to generate the fractal using the algorithm found in genImageData.js and presets.js
+ */
+
 function generateAndDrawGalery(settings) {
 
     const scalingTotal = settings.scalingPattern.reduce((acc, currV) => acc *= currV);
@@ -32,7 +37,9 @@ function generateAndDrawGalery(settings) {
 
         const scalingPattern = settings.scalingPattern;
 
-        const presetDataFN = presets[Object.keys(presets)[settings.presetIndex]](presetSettings);
+        const presetKey = Object.keys(presets)[settings.presetIndex];
+
+        const presetDataFN = presets[presetKey](presetSettings);
 
         const data = genImageData.procedualGen(presetDataFN(), scalingPattern, boundaries);
 
@@ -46,6 +53,8 @@ function generateAndDrawGalery(settings) {
     encoder.finish();
     console.log("The GIF file was created.");
 }
+
+// supposed to generate a video
 
 function toVideo(settings) {
     const scalingTotal = settings.scalingPattern.reduce((acc, currV) => acc *= currV);

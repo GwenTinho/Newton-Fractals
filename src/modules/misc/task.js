@@ -4,6 +4,10 @@ import {
 import utils from "../misc/utils";
 import presets from "../numerical/presets";
 
+/*
+    Collection of functions mainly used to measure things related to performance
+*/
+
 function getTaskInfos(settings, scalingPattern) {
     const iterationScalingFactor = scalingPattern.reduce((acc, currV) => acc *= currV);
     const iterations = settings.n * settings.w * settings.h * settings.iterations * iterationScalingFactor ** 2; // iterations per second average out around 3.6k per second => 3600 / 1000
