@@ -27,7 +27,7 @@ class Fractal {
 
     }
 
-    setPath(filePath) {
+    setPath(filePath) { // sets the filepath where the image will be saved
         this.filePath = filePath;
     }
 

@@ -1,5 +1,6 @@
 import presets from "../numerical/presets";
 import genImageData from "../numerical/genImageData";
+import "array-flat-polyfill";
 
 /*
     Helper functions mainly for math or array stuff
@@ -24,7 +25,7 @@ function isInt(n) {
 
 function isPrime(n) {
     const sqrtnum = Math.floor(Math.sqrt(n));
-    const prime = n != 1;
+    let prime = n != 1;
     for (let i = 2; i < sqrtnum + 1; i++) { // sqrtnum + 1
         if (n % i == 0) {
             prime = false;
@@ -38,17 +39,21 @@ function isPrime(n) {
 // finds all factors of an Integer returns them in complementary pairs
 
 function findFactors(n) {
-    if (isPrime(n)) return [1, n];
+    if (isPrime(n)) return [
+        [1, n]
+    ];
 
     const isEven = n % 2 === 0;
     const inc = isEven ? 1 : 2;
-    const factors = [1, n];
+    const factors = [
+        [1, n]
+    ];
     const root = Math.floor(Math.sqrt(n));
     for (let curFactor = isEven ? 2 : 3; curFactor <= root; curFactor += inc) {
         if (n % curFactor !== 0) continue;
-        factors.push(curFactor);
+
         let compliment = n / curFactor;
-        if (compliment !== curFactor) factors.push(compliment);
+        factors.push([curFactor, compliment]);
     }
 
     return factors;
@@ -62,21 +67,41 @@ function sortArr(arr) {
     return arr.sort((a, b) => a - b);
 }
 
-// finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
+function findMinIdx(arr) { // finds the index of the smallest value in array
+    if (arr.length === 0) return -1;
 
-function findScalingPatternAndInitialSize(size, minInitSize) {
-    const factors = findFactors(size);
+    let min = 0;
 
-    const smallestFittingPair = [];
-
-    for (let i = 0; i < factors.length; i++) {
-        if (factors[i] <= minInitSize) {
-            smallestFittingPair.push(factors[i]);
-            smallestFittingPair.push(factors[i + 1]);
-        }
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[min] > arr[i]) min = i;
     }
 
-    if (smallestFittingPair[0] == 1 || smallestFittingPair[1] == 1) return "?"; // make this recursive until it finds an optimal decomposition
+    return min;
+}
+
+// finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
+
+function findScalingPatternAndInitialSize(size, minInitSize, smallestFittingPairList = []) {
+    const factors = findFactors(size);
+
+    const factorsAbsDiff = factors.map(pair => Math.abs(pair[1] - pair[0]));
+
+    const smallestFittingPairIdx = findMinIdx(factorsAbsDiff);
+
+    const smallestFittingPair = factors[smallestFittingPairIdx]
+
+    smallestFittingPairList.push(smallestFittingPair);
+
+    if (smallestFittingPair[1] > minInitSize) {
+        findScalingPatternAndInitialSize(smallestFittingPair[1], minInitSize, smallestFittingPairList);
+    } else if (smallestFittingPair[0] > minInitSize) {
+        findScalingPatternAndInitialSize(smallestFittingPair[0], minInitSize, smallestFittingPairList);
+    } else {
+        console.log(smallestFittingPairList);
+        return smallestFittingPairList;
+    }
+
+    // figure this out pls thx
 
 }
 

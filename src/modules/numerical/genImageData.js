@@ -3,6 +3,12 @@
 import utils from "../misc/utils";
 import complex from "./complex";
 
+/*
+    Calculates all the relevant informations for each pixel
+    stepfunction is the actual mathematical recursion relation the rest is all standart fractal stuff (see newton fractal wikipedia page)
+    this function is the hearth of the whole thing all the other functions essentially fill a 2d array with information gathered from this function
+*/
+
 function getPixelInfo(hy, wx, settings) {
 
     const roots = settings.roots;
@@ -41,6 +47,12 @@ function getPixelInfo(hy, wx, settings) {
     }
 }
 
+/*
+    This function is needed for the next few functions that try to optimize the drawing, as most regions have the same color
+    you can map out the regions that need to be recalculated after generating a smaller version of the finished set
+    essentially scaling the whole array until you have your result getInitialGrid gives you the first iteration of these sets
+*/
+
 function getInitialGrid(settings) {
     let grid = new Array(settings.h);
 
@@ -54,31 +66,8 @@ function getInitialGrid(settings) {
     return grid;
 }
 
-function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen by reusing maps
 
-    console.log("Generating initial grid ...")
-
-    let grid = getInitialGrid(settings);
-
-    let outSettings = settings;
-
-    for (let index = 0; index < scalingPattern.length; index++) {
-        console.log("Scaling by a factor of " + scalingPattern[index] + " ...");
-        const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
-        grid = val.grid;
-        outSettings = val.settings;
-    }
-
-    const avgiterations = getAvgIterations(grid);
-
-    console.log("Avg iterations needed: " + avgiterations);
-
-    return {
-        image: grid,
-        w: outSettings.w,
-        h: outSettings.h,
-    };
-}
+// fullfills one step of the resizing of the array
 
 function oneStepProcGen(grid, settings, scaling, boundaries) {
 
@@ -126,17 +115,9 @@ function oneStepProcGen(grid, settings, scaling, boundaries) {
 
 }
 
-function scaleGrid(scaling, gridlength) {
-
-    const scaledL = gridlength * scaling;
-    let map = new Array(scaledL);
-
-    for (let i = 0; i < scaledL; i++) {
-        map[i] = new Array(scaledL);
-    }
-
-    return map;
-}
+/*
+    As stated above this looks for and marks the regions that need to be recalculated the rest of the 2d array that is now scaled can be filled with the old value
+*/
 
 function getOptmizationMap(grid, boundaries) {
 
@@ -145,7 +126,7 @@ function getOptmizationMap(grid, boundaries) {
 
     let map = new Array(l);
 
-    const boundariesUpper = boundaries;
+    const boundariesUpper = boundaries; // it looks inside a boundary around one of the values in the 2d array to check whether the values around it stay constant or change
     const boundariesLower = -boundaries + 1;
 
     for (let j = 0; j < l; j++) {
@@ -166,7 +147,7 @@ function getOptmizationMap(grid, boundaries) {
                     if (row > lminus1) continue;
                     if (row < 0) continue;
 
-                    if (grid[row][col].iteration !== grid[j][i].iteration || grid[row][col].rootIteration !== grid[j][i].rootIteration) needsRecalc = true;
+                    if (grid[row][col].iteration !== grid[j][i].iteration || grid[row][col].rootIteration !== grid[j][i].rootIteration) needsRecalc = true; // in this case it needs to be recalculated
                 }
             }
             map[j][i] = needsRecalc;
@@ -174,6 +155,25 @@ function getOptmizationMap(grid, boundaries) {
     }
     return map;
 }
+
+//scales the 2d array to a different size
+
+function scaleGrid(scaling, gridlength) {
+
+    const scaledL = gridlength * scaling;
+    let map = new Array(scaledL);
+
+    for (let i = 0; i < scaledL; i++) {
+        map[i] = new Array(scaledL);
+    }
+
+    return map;
+}
+
+/*
+    Just finds an estimate for the iterations needed 
+    // revise this
+*/
 
 function getAvgIterations(grid) {
     const l = grid.length;
@@ -186,6 +186,37 @@ function getAvgIterations(grid) {
         }
     }
     return avg;
+}
+
+/*
+    Puts all the functions together for the final 2d array
+*/
+
+
+function procedualGen(settings, scalingPattern, boundaries) { //improve proc gen by reusing maps
+
+    console.log("Generating initial grid ...")
+
+    let grid = getInitialGrid(settings);
+
+    let outSettings = settings;
+
+    for (let index = 0; index < scalingPattern.length; index++) {
+        console.log("Scaling by a factor of " + scalingPattern[index] + " ...");
+        const val = oneStepProcGen(grid, outSettings, scalingPattern[index], boundaries);
+        grid = val.grid;
+        outSettings = val.settings;
+    }
+
+    const avgiterations = getAvgIterations(grid);
+
+    console.log("Avg iterations needed: " + avgiterations);
+
+    return {
+        image: grid,
+        w: outSettings.w,
+        h: outSettings.h,
+    };
 }
 
 
