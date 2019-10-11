@@ -93,11 +93,10 @@ function findScalingPatternAndInitialSize(size, minInitSize, smallestFittingPair
     smallestFittingPairList.push(smallestFittingPair);
 
     if (smallestFittingPair[1] > minInitSize) {
-        findScalingPatternAndInitialSize(smallestFittingPair[1], minInitSize, smallestFittingPairList);
+        return findScalingPatternAndInitialSize(smallestFittingPair[1], minInitSize, smallestFittingPairList);
     } else if (smallestFittingPair[0] > minInitSize) {
-        findScalingPatternAndInitialSize(smallestFittingPair[0], minInitSize, smallestFittingPairList);
+        return findScalingPatternAndInitialSize(smallestFittingPair[0], minInitSize, smallestFittingPairList);
     } else {
-        console.log(smallestFittingPairList);
         return smallestFittingPairList;
     }
 
