@@ -79,27 +79,43 @@ function findMinIdx(arr) { // finds the index of the smallest value in array
     return min;
 }
 
-// finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
-
-function findScalingPatternAndInitialSize(size, minInitSize, smallestFittingPairList = []) {
-    const factors = findFactors(size);
+function findSmallestFittingPair(n) {
+    const factors = findFactors(n);
 
     const factorsAbsDiff = factors.map(pair => Math.abs(pair[1] - pair[0]));
 
     const smallestFittingPairIdx = findMinIdx(factorsAbsDiff);
 
-    const smallestFittingPair = factors[smallestFittingPairIdx]
+    return factors[smallestFittingPairIdx];
+}
 
-    smallestFittingPairList.push(smallestFittingPair);
+// finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
 
-    if (smallestFittingPair[1] > minInitSize) {
-        return findScalingPatternAndInitialSize(smallestFittingPair[1], minInitSize, smallestFittingPairList);
-    } else if (smallestFittingPair[0] > minInitSize) {
-        return findScalingPatternAndInitialSize(smallestFittingPair[0], minInitSize, smallestFittingPairList);
-    } else {
-        return smallestFittingPairList;
+function findScalingPatternAndInitialSize(size, minInitSize) {
+
+    const smallestFittingPair = findSmallestFittingPair(size);
+    let layerList = smallestFittingPair;
+
+    let notDone = true;
+    while (notDone) {
+
+        let flag = true;
+
+        for (const value of layerList) { // turn into tree and solve it in 2d
+            if (value > minInitSize) {
+                const smallestFittingPair = findSmallestFittingPair(value);
+                layerList.slice(layerList.findIndex(val => val === value), 1);
+                layerList.concat(smallestFittingPair);
+                console.log(layerList)
+                flag = false;
+            }
+            console.log(flag);
+        }
+        console.log(flag);
+        if (flag) notDone = false;
     }
 
+    return smallestFittingPairList;
     // figure this out pls thx
 
 }

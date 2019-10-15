@@ -57,3 +57,5 @@ class Fractal {
         }
     }
 }
+
+export default Fractal
