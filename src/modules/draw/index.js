@@ -10,7 +10,7 @@ import path from "path";
 import fs from "fs";
 import GIFEncoder from "gifencoder";
 
-function drawCanvas(imageData, colorAlgIndex) {
+function drawCanvas(imageData, colorAlgIndex) { // use image data from functions defined in genimagedata
     const [image, w, h] = [imageData.image, imageData.w, imageData.h];
 
     const canvas = createCanvas(w, h);

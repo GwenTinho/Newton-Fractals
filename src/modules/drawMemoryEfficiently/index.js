@@ -23,7 +23,7 @@ function generateAndDrawGalery(settings) {
     encoder.setDelay(10); // frame delay in ms
     encoder.setQuality(10); // image quality. 10 is default.
 
-    const boundaries = 4;
+    const boundaries = 4; // boundary of the mapping test descibed in genImageData
 
 
     for (let index = 0; index < settings.aValues.length; index++) {

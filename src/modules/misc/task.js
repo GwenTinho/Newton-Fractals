@@ -66,11 +66,11 @@ function getFunctionRuntime(fn, params) {
     }
 }
 
-function getStatistics(settings) {
+function getStatistics(settings) { // does a lot of things for you such as getting presets and such and then returns the data from the algorithm
     const presetSettings = {
         w: settings.w,
         h: settings.h,
-        n: settings.n,
+        n: settings.n, // n describes the exponent if the the function used for the fractal is of the z^n - 1
         iterations: 40,
         a: settings.a,
         scalingPattern: settings.scalingPattern
@@ -87,7 +87,7 @@ function getStatistics(settings) {
     const {
         data,
         completingTime
-    } = getFunctionRuntime(genImageData.procedualGen,
+    } = getFunctionRuntime(genImageData.procedualGen, // runs genImageData with all the required settings
         [presetDataFN(), scalingPattern, boundaries]
     );
 
