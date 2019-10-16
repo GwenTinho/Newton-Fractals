@@ -89,35 +89,62 @@ function findSmallestFittingPair(n) {
     return factors[smallestFittingPairIdx];
 }
 
+// replaces similar values by spreadArray and shifts all the old values with higher indicies to the corresponding spot, it then returns the new array
+
+function replaceAndSpreadIntoArray(value, spreadArray, inputArray) {
+    let newArray = []
+
+    for (let i = 0; i < inputArray.length; i++) {
+        if (inputArray[i] === value) newArray.push(...spreadArray);
+        else newArray.push(inputArray[i]);
+    }
+
+    return newArray;
+}
+
+// compares every value in array to another value and returns the && of them all
+// only works for number arrays
+
+function forAllSmallerThanValue(array, value) {
+
+    for (let index = 0; index < array.length; index++) {
+        if (array[index] >= value) return false;
+    }
+    return true;
+}
+
 // finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
 
 function findScalingPatternAndInitialSize(size, minInitSize) {
 
     const smallestFittingPair = findSmallestFittingPair(size);
-    let layerList = smallestFittingPair;
+    let newList = smallestFittingPair;
 
     let notDone = true;
     while (notDone) {
 
-        let flag = true;
+        for (let i = 0; i < newList.length; i++) {
+            const value = newList[i];
 
-        for (const value of layerList) { // turn into tree and solve it in 2d
+            /*
+            if there are primes that are bigger than 
+            the min they cant be factored further anyways
+            so we just return the new list its as good as it gets
+            */
+
+            if (value > minInitSize && isPrime(value)) return newList;
+
             if (value > minInitSize) {
                 const smallestFittingPair = findSmallestFittingPair(value);
-                layerList.slice(layerList.findIndex(val => val === value), 1);
-                layerList.concat(smallestFittingPair);
-                console.log(layerList)
-                flag = false;
+
+                newList = replaceAndSpreadIntoArray(value, smallestFittingPair, newList);
             }
-            console.log(flag);
         }
-        console.log(flag);
-        if (flag) notDone = false;
+
+        notDone = !forAllSmallerThanValue(newList);
     }
 
-    return smallestFittingPairList;
-    // figure this out pls thx
-
+    return newList;
 }
 
 function tenToTheMinus(n) {
@@ -182,6 +209,9 @@ export default {
     fillRange,
     isInt,
     isPrime,
-    findDivisors,
-    findScalingPatternAndInitialSize
+    findFactors,
+    findScalingPatternAndInitialSize,
+    findSmallestFittingPair,
+    replaceAndSpreadIntoArray,
+    forAllSmallerThanValue
 }
