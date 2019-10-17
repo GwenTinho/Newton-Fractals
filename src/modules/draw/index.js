@@ -31,7 +31,7 @@ function drawCanvas(imageData, colorAlgIndex) { // use image data from functions
     };
 }
 
-function drawJPEG(data, colorAlgIndex) {
+function drawJPEG(data, colorAlgIndex) { // add filename and filepath variables
     const image = drawCanvas(data, colorAlgIndex).canvas;
 
     const out = fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/myfractal.jpeg"));

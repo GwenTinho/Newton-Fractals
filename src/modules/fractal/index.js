@@ -15,7 +15,7 @@ import Complex from "../numerical/complex";
 */
 
 class Fractal {
-    constructor(isGif = false, size = 2000, presetIndex = 0, coloringAlgIndex = 0, n = 3) {
+    constructor(isGif = false, size = 2000, presetIndex = 0, coloringAlgIndex = 0, n = 3) { // turn everything except size and n into an object called options
         this.isGif = (typeof isGif === "boolean") ? isGif : false;
         this.size = ((typeof size === "number") && !utils.isPrime(size) && utils.isInt(size)) ? size : 2000; // check if it is a number and an int and non prime
         this.n = ((typeof n === "number") && utils.isInt(n)) ? n : 3; // assumes n as an integer
