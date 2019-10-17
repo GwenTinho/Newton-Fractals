@@ -3,7 +3,7 @@ import {
 } from "perf_hooks";
 import utils from "../misc/utils";
 import presets from "../numerical/presets";
-
+import genImageData from "../numerical/genImageData";
 /*
     Collection of functions mainly used to measure things related to performance
 */
@@ -82,7 +82,9 @@ function getStatistics(settings) { // does a lot of things for you such as getti
 
     console.log(taskInfos.message);
 
-    const presetDataFN = Object.keys(presets)[settings.presetIndex](presetSettings);
+    const presetKey = Object.keys(presets)[settings.presetIndex];
+
+    const presetDataFN = presets[presetKey](presetSettings);
 
     const {
         data,

@@ -1,8 +1,7 @@
 "use strict";
 
-import utils from "./modules/misc/utils";
+import Fractal from "./modules/fractal";
 
-let pattern = utils.findScalingPatternAndInitialSize(360, 16);
+let fractal = new Fractal();
 
-
-console.log(pattern);
+fractal.draw();

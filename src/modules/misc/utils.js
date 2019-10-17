@@ -117,8 +117,13 @@ function forAllSmallerThanValue(array, value) {
 
 function findScalingPatternAndInitialSize(size, minInitSize) {
 
-    const smallestFittingPair = findSmallestFittingPair(size);
+
+    let scaledSize = Math.floor(size / minInitSize);
+
+    const smallestFittingPair = findSmallestFittingPair(scaledSize);
     let newList = smallestFittingPair;
+
+
 
     let notDone = true;
     while (notDone) {
@@ -132,7 +137,10 @@ function findScalingPatternAndInitialSize(size, minInitSize) {
             so we just return the new list its as good as it gets
             */
 
-            if (value > minInitSize && isPrime(value)) return newList;
+            if (value > minInitSize && isPrime(value)) return {
+                scalingPattern: newList,
+                minInitSize
+            };
 
             if (value > minInitSize) {
                 const smallestFittingPair = findSmallestFittingPair(value);
@@ -144,7 +152,10 @@ function findScalingPatternAndInitialSize(size, minInitSize) {
         notDone = !forAllSmallerThanValue(newList);
     }
 
-    return newList;
+    return {
+        scalingPattern: newList,
+        minInitSize
+    };
 }
 
 function tenToTheMinus(n) {
