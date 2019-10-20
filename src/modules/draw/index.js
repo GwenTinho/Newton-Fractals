@@ -31,10 +31,13 @@ function drawCanvas(imageData, colorAlgIndex) { // use image data from functions
     };
 }
 
-function drawJPEG(data, colorAlgIndex) { // add filename and filepath variables
+function drawJPEG(data, colorAlgIndex, filePath, fileName) { // add filename and filepath variables
     const image = drawCanvas(data, colorAlgIndex).canvas;
 
-    const out = fs.createWriteStream(path.join(__dirname, "/../../../recent images", "/fractal.jpeg"));
+
+    //for more infos on errors for this see https://gist.github.com/casamia918/031199ff5e015c56f87088765b047526
+
+    const out = fs.createWriteStream(path.join(filePath, fileName));
     const stream = image.createJPEGStream({
         quality: 0.95,
         chromaSubsampling: false

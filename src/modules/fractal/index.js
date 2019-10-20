@@ -21,8 +21,8 @@ class Fractal {
         this.n = ((typeof n === "number") && utils.isInt(n)) ? n : 3; // assumes n as an integer
         this.presetIndex = presetIndex;
         this.coloringAlgIndex = coloringAlgIndex;
-        this.filePath = "sample filePath" // file path for gif or jpeg to be sent to
-
+        this.filePath = "C:/Users/qschr/source/repos/recent images"; // file path for gif or jpeg to be sent to
+        this.fileName = "fractal.jpeg"
         // internal variables used for drawing
 
         /*
@@ -36,8 +36,12 @@ class Fractal {
         this.initSize = patternAndInitSize.minInitSize;
     }
 
-    setPath(filePath) { // sets the filepath where the image will be saved
+    setFilePath(filePath) { // sets the filepath where the image will be saved
         this.filePath = filePath;
+    }
+
+    setFileName(fileName) {
+        this.fileName = fileName;
     }
 
     draw() { // generates the actual image
@@ -65,7 +69,7 @@ class Fractal {
             // see getStatistics in /misc/task
 
             const data = task.getStatistics(settings);
-            draw.drawJPEG(data, this.coloringAlgIndex);
+            draw.drawJPEG(data, this.coloringAlgIndex, this.filePath, this.fileName);
         }
     }
 }
