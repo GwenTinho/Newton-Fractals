@@ -115,10 +115,10 @@ function forAllSmallerThanValue(array, value) {
 
 // finds ScalingPattern and inital Size of 2d array for scaling algorithms used later in genImageData.js
 
-function findScalingPatternAndInitialSize(size, minInitSize) {
+function findScalingPatternAndInitialSize(size, initSize, minScale) {
 
 
-    let scaledSize = Math.floor(size / minInitSize);
+    let scaledSize = Math.floor(size / initSize);
 
     const smallestFittingPair = findSmallestFittingPair(scaledSize);
     let newList = smallestFittingPair;
@@ -137,12 +137,12 @@ function findScalingPatternAndInitialSize(size, minInitSize) {
             so we just return the new list its as good as it gets
             */
 
-            if (value > minInitSize && isPrime(value)) return {
+            if (value > minScale && isPrime(value)) return {
                 scalingPattern: newList,
-                minInitSize
+                initSize
             };
 
-            if (value > minInitSize) {
+            if (value > minScale) {
                 const smallestFittingPair = findSmallestFittingPair(value);
 
                 newList = replaceAndSpreadIntoArray(value, smallestFittingPair, newList);
@@ -154,7 +154,7 @@ function findScalingPatternAndInitialSize(size, minInitSize) {
 
     return {
         scalingPattern: newList,
-        minInitSize
+        initSize
     };
 }
 

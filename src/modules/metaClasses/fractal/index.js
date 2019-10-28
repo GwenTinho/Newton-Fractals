@@ -1,8 +1,11 @@
 "use strict";
-import draw from "../draw";
-import task from "../misc/task";
-import utils from "../misc/utils";
-import Complex from "../numerical/complex";
+import draw from "../../draw";
+import task from "../../misc/task";
+import utils from "../../misc/utils";
+import Complex from "../../numerical/complex";
+import {
+    throws
+} from "assert";
 
 
 /*
@@ -15,7 +18,7 @@ import Complex from "../numerical/complex";
 */
 
 class Fractal {
-    constructor(isGif = false, size = 2000, presetIndex = 0, coloringAlgIndex = 0, n = 3) { // turn everything except size and n into an object called options
+    constructor(size = 2000, n = 3, presetIndex = 0, coloringAlgIndex = 0, isGif = false) { // turn everything except size and n into an object called options
         this.isGif = (typeof isGif === "boolean") ? isGif : false;
         this.size = ((typeof size === "number") && !utils.isPrime(size) && utils.isInt(size)) ? size : 2000; // check if it is a number and an int and non prime
         this.n = ((typeof n === "number") && utils.isInt(n)) ? n : 3; // assumes n as an integer
@@ -28,21 +31,32 @@ class Fractal {
         /*
             initSize: size of the 2d array before being scaled up to size  (set to 40 by default)
             scalingPattern: Path taken to get to said size
+            a: used for rotation see wikipedia page for newton fractals
         */
 
-        let patternAndInitSize = utils.findScalingPatternAndInitialSize(this.size, 40);
+        let patternAndInitSize = utils.findScalingPatternAndInitialSize(this.size, 40, 20);
 
         this.scalingPattern = patternAndInitSize.scalingPattern;
-        this.initSize = patternAndInitSize.minInitSize;
+        this.initSize = patternAndInitSize.initSize;
+        this.a = Complex.cmx(1, 0);
     }
 
     setFilePath(filePath) { // sets the filepath where the image will be saved
         this.filePath = filePath;
     }
 
-    setFileName(fileName) {
+    setFileName(fileName) { // filename has to include .jpeg
         this.fileName = fileName;
     }
+
+    setA(real = 1, imag = 0) {
+        this.a = Complex.cmx(real, imag);
+    }
+
+    setIterations(iterations = 0) { // see task.js getStatistics for more
+        this.iterations = iterations;
+    }
+
 
     draw() { // generates the actual image
 
@@ -62,8 +76,9 @@ class Fractal {
                 h: this.initSize,
                 scalingPattern: this.scalingPattern,
                 n: this.n,
-                a: Complex.cmx(1, 0), // "a" is a parameter that is a number for special scaling view wikipedia (for gifs its an array)
-                presetIndex: this.presetIndex
+                a: this.a, // "a" is a parameter that is a number for special scaling view wikipedia (for gifs its an array)
+                presetIndex: this.presetIndex,
+                iterations: this.iterations
             };
 
             // see getStatistics in /misc/task

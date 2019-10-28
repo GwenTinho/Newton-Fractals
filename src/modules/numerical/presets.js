@@ -37,7 +37,14 @@ function getPresetOfOrderN(settings) {
 
     console.log("Getting max iterations...");
 
-    const iterations = helperFunctions.findMaxIterationPerPixel(sideLength, baseRange || [-1.3, 1.3], tolerance, stepFunction, roots);
+    let iterations;
+
+    if (settings.iterations) {
+        iterations = settings.iterations;
+    } else {
+        iterations = helperFunctions.findMaxIterationPerPixel(sideLength, baseRange || [-1.3, 1.3], tolerance, stepFunction, roots);
+    }
+
 
     console.log("Maxiterations for this drawing is " + iterations);
 

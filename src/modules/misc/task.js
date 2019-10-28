@@ -71,7 +71,7 @@ function getStatistics(settings) { // does a lot of things for you such as getti
         w: settings.w,
         h: settings.h,
         n: settings.n, // n describes the exponent if the the function used for the fractal is of the z^n - 1
-        iterations: 40,
+        iterations: settings.iterations, // iteration limit per pixel leave empty or falsy to automatically calculate maxiter (helperfunctions -> findmaxiterationperpixel)
         a: settings.a,
         scalingPattern: settings.scalingPattern
     }
