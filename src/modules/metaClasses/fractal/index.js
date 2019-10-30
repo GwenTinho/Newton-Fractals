@@ -24,7 +24,7 @@ class Fractal {
         this.n = ((typeof n === "number") && utils.isInt(n)) ? n : 3; // assumes n as an integer
         this.presetIndex = presetIndex;
         this.coloringAlgIndex = coloringAlgIndex;
-        this.filePath = "C:/Users/qschr/source/repos/recent images"; // file path for gif or jpeg to be sent to
+        this.filePath = "not set yet"; // file path for gif or jpeg to be sent to
         this.fileName = "fractal.jpeg"
         // internal variables used for drawing
 

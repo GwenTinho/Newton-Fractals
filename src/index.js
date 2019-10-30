@@ -5,11 +5,11 @@ import Fractal from "./modules/metaClasses/fractal";
 
 let fractals = new Fractals();
 
-for (let i = 0; i < 10; i++) {
-    let fractal = new Fractal(2000, i + 3, 0, i % 3);
+for (let i = 0; i < 5; i++) {
+    let fractal = new Fractal(1600, i + 3, 0, i % 3);
     fractal.setFileName("fractal" + i + ".jpeg");
-    fractal.setA(0.9, 0.05 * i);
-    fractal.setIterations(80);
+    fractal.setA(0.9, 0.3 * i);
+    fractal.setIterations(180);
     fractals.add(fractal);
 
 }
