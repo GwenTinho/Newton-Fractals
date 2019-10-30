@@ -17,7 +17,10 @@ class Fractals {
     }
 
     draw() {
-        this.fractals.forEach(fractal => fractal.draw());
+        this.fractals.forEach((fractal, i) => {
+            console.log("Drawing image nr." + (i + 1));
+            fractal.draw();
+        });
     }
 }
 
