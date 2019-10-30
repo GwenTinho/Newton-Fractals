@@ -5,7 +5,7 @@ import complex from "./complex";
 import NumberSystem from "./numberSystem";
 import helperFunctions from "./helperfunctions";
 
-function getPresetOfOrderN(settings) {
+function getPresetOfOrderN(settings) { // implement complex exponents find solutions + and implement it as a function
 
     const
         n = settings.n,
