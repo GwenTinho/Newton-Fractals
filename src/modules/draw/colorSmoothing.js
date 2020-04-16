@@ -1,7 +1,7 @@
 "use strict";
 
 import utils from "../misc/utils";
-import complex from "../numerical/complex";
+import complex from "../numerical/complexWrapper";
 import NumberSystem from "../numerical/numberSystem";
 
 function getSmoothHSV(genPixelOutput) {

@@ -18,6 +18,7 @@
     "array-flat-polyfill": "^1.0.1",
     "babel-preset-env": "^2.0.0-alpha.20",
     "canvas": "^2.6.0",
+    "complex.js": "^2.0.11",
     "decimal.js": "^10.0.2",
     "gifencoder": "^2.0.1",
     "nodemon": "^1.18.9",

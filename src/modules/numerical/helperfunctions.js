@@ -1,4 +1,4 @@
-import complex from "../numerical/complex";
+import complex from "./complexWrapper";
 
 function compareRootsToVal(roots, z, tolerance) {
     let out = false;

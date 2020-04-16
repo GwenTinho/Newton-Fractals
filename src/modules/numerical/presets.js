@@ -1,9 +1,14 @@
 "use strict";
-
-import utils from "../misc/utils";
-import complex from "./complex";
-import NumberSystem from "./numberSystem";
+import Complex from "complex.js";
 import helperFunctions from "./helperfunctions";
+
+// complex newtons method
+function newtStep(f, df, z) {
+    const fz = f(z);
+    const dfz = df(z);
+
+    return z.sub(fz.div(dfz));
+}
 
 function getPresetOfOrderN(settings) { // implement complex exponents find solutions + and implement it as a function
 
@@ -12,25 +17,31 @@ function getPresetOfOrderN(settings) { // implement complex exponents find solut
         w = settings.w,
         h = settings.h,
         a = settings.a,
-        tolerance = new NumberSystem(utils.tenToTheMinus(10));
+        tolerance = 1e-10;
 
 
-    const complexA = complex.cmx(a.real, a.imag);
+    const complexA = new Complex({
+        re: a.real,
+        im: a.imag
+    });
 
     let baseRange // = [-100, 100]
 
     let stepFunction = z => {
-        let v = z.getInstance().cmultiply(complex.cmx(n - a.real, -a.imag));
-        let w = z.getCexp(1 - n).cmultiply(complexA);
-        let wplusv = v.getAddition(w);
-        return wplusv.divByReal(n);
+        let v = z.mul(n.sub(a));
+        let w = z.pow(1 - n).mul(complexA);
+        let wplusv = v.add(w);
+        return wplusv.div(n);
     }
 
     let roots = [];
 
     for (let i = 0; i < n; i++) {
-        let pi = NumberSystem.acos(-1);
-        roots.push(complex.pol(1, pi.mul(2 * i).div(n)));
+        let pi = Math.PI;
+        roots.push(new Complex({
+            r: 1,
+            phi: pi * 2 * i / n
+        }));
     }
 
     const sideLength = settings.w * settings.scalingPattern.reduce((acc, currV) => acc *= currV);
@@ -68,22 +79,31 @@ function getSinePreset(settings) {
         w = settings.w,
         h = settings.h,
         a = settings.a,
-        tolerance = new NumberSystem(utils.tenToTheMinus(14));
+        tolerance = 1e-14;
 
 
-    const complexA = complex.cmx(a.real, a.imag);
+    const complexA = new Complex({
+        re: a.real,
+        im: a.imag
+    });
 
-    let baseRange // [-0, 2]
+    let baseRange // = [-100, 100]
 
-    let stepFunction = z => z.getSubstract(complex.tan(z).cmultiply(complexA));
+    let stepFunction = z => z.sub(Complex.tan(z).mul(complexA));
 
-    const pi = NumberSystem.acos(-1);
+    const pi = Complex.PI;
 
-    let roots = [complex.cmx(0, 0)];
+    let roots = [Complex.ZERO];
 
     for (let i = 1; i < n; i++) {
-        roots.push(complex.cmx(pi.mul(i), 0));
-        roots.push(complex.cmx(pi.mul(-i), 0));
+        roots.push(new Complex({
+            re: i * pi,
+            im: 0
+        }));
+        roots.push(complex.cmx({
+            re: -i * pi,
+            im: 0
+        }));
     }
 
     console.log("Getting max iterations...");

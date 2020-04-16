@@ -1,7 +1,7 @@
 "use strict";
 
 import utils from "../misc/utils";
-import complex from "./complex";
+import complex from "./complexWrapper";
 
 /*
     Calculates all the relevant informations for each pixel
