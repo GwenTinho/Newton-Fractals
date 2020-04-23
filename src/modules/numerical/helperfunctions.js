@@ -1,9 +1,9 @@
-import complex from "./complexWrapper";
+import Complex from "complex.js";
 
 function compareRootsToVal(roots, z, tolerance) {
     let out = false;
     for (let i = 0; i < roots.length; i++) {
-        out = out || complex.getSqrDist(z, roots[i]).lt(tolerance);
+        out = out || z.sub(roots[i]).abs() < tolerance;
     }
     return out;
 }
@@ -19,16 +19,25 @@ function findIterationsNeeded(z, tolerance, stepFunction, roots) {
 
 function findMaxIterationPerPixel(sideLength, range, tolerance, stepFunction, roots) {
     let minValPerPixel = (range[1] - range[0]) / sideLength;
-    const realOnly = findIterationsNeeded(complex.cmx(minValPerPixel, 0), tolerance, stepFunction, roots);
-    const imagOnly = findIterationsNeeded(complex.cmx(0, minValPerPixel), tolerance, stepFunction, roots);
-    const both = findIterationsNeeded(complex.cmx(minValPerPixel, minValPerPixel), tolerance, stepFunction, roots);
+    const realOnly = findIterationsNeeded(new Complex({
+        re: minValPerPixel,
+        im: 0
+    }), tolerance, stepFunction, roots);
+    const imagOnly = findIterationsNeeded(new Complex({
+        re: 0,
+        im: minValPerPixel
+    }), tolerance, stepFunction, roots);
+    const both = findIterationsNeeded(new Complex({
+        re: minValPerPixel,
+        im: minValPerPixel
+    }), tolerance, stepFunction, roots);
     return Math.max(realOnly, imagOnly, both);
 }
 
 function findRoot(startpoint, f, df, tolerance) {
     let z = startpoint;
 
-    while (!f(z).lt(tolerance)) {
+    while (!f(z).abs() < tolerance) {
         z = complex.newtStep(f, df, z);
     }
 

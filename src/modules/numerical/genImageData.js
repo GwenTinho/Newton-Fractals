@@ -1,7 +1,7 @@
 "use strict";
 
 import utils from "../misc/utils";
-import complex from "./complexWrapper";
+import Complex from "complex.js";
 
 /*
     Calculates all the relevant informations for each pixel
@@ -18,14 +18,17 @@ function getPixelInfo(hy, wx, settings) {
     const zy = utils.convertRange(hy + 1, [1, settings.h], settings.rangey);
     const stepFunction = settings.stepFunction;
 
-    let z = complex.cmx(zx, zy);
+    let z = new Complex({
+        re: zx,
+        im: zy
+    });
 
     for (let iteration = 0; iteration < maxIteration; iteration++) {
         let oldZ = z;
         z = stepFunction(z);
 
         for (let i = 0; i < rootLength; i++) {
-            if (complex.getSqrDist(z, roots[i]).lt(settings.tolerance)) {
+            if (z.sub(roots[i]).abs() < settings.tolerance) {
 
                 return {
                     root: roots[i],
