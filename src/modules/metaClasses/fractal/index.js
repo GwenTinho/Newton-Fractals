@@ -2,11 +2,7 @@
 import draw from "../../draw";
 import task from "../../misc/task";
 import utils from "../../misc/utils";
-import Complex from "../../numerical/complex";
-import {
-    throws
-} from "assert";
-
+import Complex from "complex.js";
 
 /*
     Generates a square fractal 
@@ -38,7 +34,10 @@ class Fractal {
 
         this.scalingPattern = patternAndInitSize.scalingPattern;
         this.initSize = patternAndInitSize.initSize;
-        this.a = Complex.cmx(1, 0);
+        this.a = new Complex({
+            re: 1,
+            im: 0
+        });
     }
 
     setFilePath(filePath) { // sets the filepath where the image will be saved
@@ -50,7 +49,10 @@ class Fractal {
     }
 
     setA(real = 1, imag = 0) {
-        this.a = Complex.cmx(real, imag);
+        this.a = new Complex({
+            re: real,
+            im: imag
+        });
     }
 
     setIterations(iterations = 0) { // see task.js getStatistics for more

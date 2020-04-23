@@ -53,7 +53,7 @@ function getPixelInfo(hy, wx, settings) {
 /*
     This function is needed for the next few functions that try to optimize the drawing, as most regions have the same color
     you can map out the regions that need to be recalculated after generating a smaller version of the finished set
-    essentially scaling the whole array until you have your result getInitialGrid gives you the first iteration of these sets
+    essentially scaling the whole array until you have your result. getInitialGrid gives you the first iteration of these sets
 */
 
 function getInitialGrid(settings) {

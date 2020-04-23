@@ -13,7 +13,10 @@ function newtStep(f, df, z) {
 function getPresetOfOrderN(settings) { // implement complex exponents find solutions + and implement it as a function
 
     const
-        n = settings.n,
+        n = new Complex({
+            re: settings.n,
+            im: 0
+        }),
         w = settings.w,
         h = settings.h,
         a = settings.a,
