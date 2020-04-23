@@ -26,10 +26,9 @@ function getPixelInfo(hy, wx, settings) {
     for (let iteration = 0; iteration < maxIteration; iteration++) {
         let oldZ = z;
         z = stepFunction(z);
-
+        debugger;
         for (let i = 0; i < rootLength; i++) {
             if (z.sub(roots[i]).abs() < settings.tolerance) {
-
                 return {
                     root: roots[i],
                     rootIteration: i,

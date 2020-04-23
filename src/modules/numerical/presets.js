@@ -23,16 +23,16 @@ function getPresetOfOrderN(settings) { // implement complex exponents find solut
         tolerance = 1e-10;
 
 
-    const complexA = new Complex({
-        re: a.real,
-        im: a.imag
-    });
+    const complex1MinusN = new Complex({
+        re: 1,
+        im: 0
+    }).sub(n);
 
     let baseRange // = [-100, 100]
 
     let stepFunction = z => {
         let v = z.mul(n.sub(a));
-        let w = z.pow(1 - n).mul(complexA);
+        let w = z.pow(complex1MinusN).mul(a);
         let wplusv = v.add(w);
         return wplusv.div(n);
     }
@@ -85,14 +85,9 @@ function getSinePreset(settings) {
         tolerance = 1e-14;
 
 
-    const complexA = new Complex({
-        re: a.real,
-        im: a.imag
-    });
-
     let baseRange // = [-100, 100]
 
-    let stepFunction = z => z.sub(Complex.tan(z).mul(complexA));
+    let stepFunction = z => z.sub(Complex.tan(z).mul(a));
 
     const pi = Complex.PI;
 
