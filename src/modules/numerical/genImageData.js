@@ -6,7 +6,7 @@ import Complex from "complex.js";
 /*
     Calculates all the relevant informations for each pixel
     stepfunction is the actual mathematical recursion relation the rest is all standart fractal stuff (see newton fractal wikipedia page)
-    this function is the hearth of the whole thing all the other functions essentially fill a 2d array with information gathered from this function
+    this function is the heart of the whole thing all the other functions essentially fill a 2d array with information gathered from this function
 */
 
 function getPixelInfo(hy, wx, settings) {
