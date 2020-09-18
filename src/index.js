@@ -14,5 +14,5 @@ for (let i = 3; i < 4; i++) {
 
 }
 
-fractals.setFilePath("C:/Users/qschr/Desktop/gallery");
+fractals.setFilePath("your path");
 fractals.draw();
